@@ -1,0 +1,72 @@
+.skill-tree {
+  display: flex;
+  flex-direction: column;
+}
+
+.archetype {
+  display: flex;
+  flex-direction: column;
+}
+
+.archetype-name {
+  font-size: 1.5em;
+  font-weight: bold;
+  margin-bottom: 0.5em;
+}
+
+.skills {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.skill-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin: 0.5em;
+  padding: 0.5em;
+  width: 300px;
+  height: 200px;
+  background-color: rgb(183, 190, 197);
+  padding-bottom: 1.5em;
+  position: relative;
+}
+
+.skill-card:hover {
+  transform: scale(1.05);
+  background-color: rgb(227, 228, 230);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, .12), 0 4px 8px rgba(0, 0, 0, .06);
+}
+
+.skill-name {
+  font-size: 1.2em;
+  font-weight: bold;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+.skill-card:hover .skill-name {
+  top: 0.5em;
+}
+
+
+.skill-prerequisite {
+  font-size: 0.8em;
+  font-style: italic;
+  margin-bottom: 0.5em;
+}
+
+.skill-description {
+  font-size: 0.8em;
+  max-height: 145px;
+  overflow: auto;
+}
+
+.hidden {
+  display: none;
+}

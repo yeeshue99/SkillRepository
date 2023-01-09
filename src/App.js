@@ -1,23 +1,99 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from 'react';
+import SkillTree from './SkillTree';
+import Papa from 'papaparse';
 
 function App() {
+  const [skillsData, setSkillsData] = useState([]);
+  let [selectedArchetype, setSelectedArchetype] = useState(0);
+
+  useEffect(() => {
+    fetch(`${process.env.PUBLIC_URL}/skills.csv`)
+      .then((response) => response.text())
+      .then((csv) => {
+        // Parse the CSV
+        const results = Papa.parse(csv, {
+          header: true,
+          dynamicTyping: true,
+          delimiter: ",",
+          newline: "\r\n"
+        });
+
+        // Transform the data into an array of objects
+        const data = results.data.slice(0, -1).map((row) => ({
+          name: row.name,
+          archetype: row.archetype,
+          prerequisite: row.prerequisite,
+          casting_time: row.casting_time,
+          range: row.range,
+          duration: row.duration,
+          uses: row.uses,
+          has_active: row.has_active,
+          has_passive: row.has_passive,
+          description: row.description,
+        }));
+
+        setSkillsData(data);
+
+        setSelectedArchetype(data[0].archetype)
+      });
+  }, []);
+
+  const skillGroups = skillsData.reduce((groups, skill) => {
+    const { archetype } = skill;
+    if (!groups[archetype]) {
+      groups[archetype] = [];
+    }
+    groups[archetype].push(skill);
+    return groups;
+  }, {});
+
+  // Function to cycle through the archetypes
+  const handleArchetypeCycleBackwards = () => {
+    // Get the list of archetypes
+    const archetypes = Object.keys(skillGroups);
+    // Find the index of the currently selected archetype
+    let index = archetypes.indexOf(selectedArchetype);
+    // Increment the index and wrap it around if necessary
+    index = index - 1
+    if (index < 0) {
+      index = archetypes.length - 1
+    }
+    // Set the selected archetype to the next one in the list
+    setSelectedArchetype(archetypes[index]);
+  };
+
+  // Function to cycle through the archetypes
+  const handleArchetypeCycleForwards = () => {
+    // Get the list of archetypes
+    const archetypes = Object.keys(skillGroups);
+    // Find the index of the currently selected archetype
+    const index = archetypes.indexOf(selectedArchetype);
+    // Increment the index and wrap it around if necessary
+    const nextIndex = (index + 1) % archetypes.length;
+    // Set the selected archetype to the next one in the list
+    setSelectedArchetype(archetypes[nextIndex]);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+    <div>
+      <button onClick={handleArchetypeCycleBackwards}>Previous archetype</button>
+      <button onClick={handleArchetypeCycleForwards}>Next archetype</button>
+      <div>
+        <label htmlFor="archetype-select">Select an archetype:</label>
+        <select
+          id="archetype-select"
+          value={selectedArchetype}
+          onChange={(event) => setSelectedArchetype(event.target.value)}
         >
-          Learn React
-        </a>
-      </header>
+          {Object.keys(skillGroups).map((archetype, skill) => (
+            <option key={archetype} value={archetype}>{archetype}</option>
+          ))}
+        </select>
+      </div>
+      <SkillTree
+        data={skillGroups}
+        selectedArchetype={selectedArchetype}
+      />
     </div>
   );
 }
