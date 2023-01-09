@@ -34,6 +34,8 @@ function App() {
 
         setSkillsData(data);
 
+        console.log(data)
+
         setSelectedArchetype(data[0].archetype)
       });
   }, []);
