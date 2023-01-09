@@ -18,6 +18,8 @@ function App() {
           newline: "\r\n"
         });
 
+        console.log(results)
+
         // Transform the data into an array of objects
         const data = results.data.slice(0, -1).map((row) => ({
           name: row.name,
