@@ -15,7 +15,7 @@ function App() {
           header: true,
           dynamicTyping: true,
           delimiter: ",",
-          newline: "\r\n"
+          newline: "\n"
         });
         console.log(process.env.PUBLIC_URL)
         console.log(results)
