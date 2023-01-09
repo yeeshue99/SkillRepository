@@ -17,7 +17,7 @@ function App() {
           delimiter: ",",
           newline: "\r\n"
         });
-
+        console.log(process.env.PUBLIC_URL)
         console.log(results)
 
         // Transform the data into an array of objects
