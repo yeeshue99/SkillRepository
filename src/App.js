@@ -18,7 +18,7 @@ function App() {
   let [selectedArchetype, setSelectedArchetype] = useState(0);
 
   useEffect(() => {
-    if (process.env.NODE_ENV === 'production') {
+    if (process.env.NODE_ENV !== 'production') {
       fetch(`${process.env.PUBLIC_URL}/skills.csv`)
         .then((response) => response.text())
         .then((csv) => {
