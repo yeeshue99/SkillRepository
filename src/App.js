@@ -7,7 +7,6 @@ import { createClient } from '@supabase/supabase-js'
 let supabase = null
 
 if (process.env.NODE_ENV === 'production') {
-  console.log(process.env)
   supabase = createClient(process.env.REACT_APP_DATABASE_URL, process.env.REACT_APP_DATABASE_API_KEY)
 }
 
