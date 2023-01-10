@@ -22,6 +22,8 @@ function App() {
   let [selectedArchetype, setSelectedArchetype] = useState(0);
 
   useEffect(() => {
+    document.title = 'Skill Browser';
+
     if (process.env.NODE_ENV !== 'production') {
       fetch(`${process.env.PUBLIC_URL}/skills.csv`)
         .then((response) => response.text())
