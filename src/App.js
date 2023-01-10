@@ -4,8 +4,12 @@ import Papa from 'papaparse';
 import { createClient } from '@supabase/supabase-js'
 
 // Create a single supabase client for interacting with your database
-console.log(process.env)
-const supabase = createClient(process.env.DATABASE_URL, process.env.DATABASE_API_KEY)
+let supabase = null
+
+if (process.env.NODE_ENV === 'production') {
+  supabase = createClient(process.env.DATABASE_URL, process.env.DATABASE_API_KEY)
+}
+
 
 async function getSkills() {
   const skills = await supabase.from('Skills').select()
