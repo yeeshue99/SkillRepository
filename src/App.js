@@ -1,46 +1,69 @@
 import React, { useEffect, useState } from 'react';
 import SkillTree from './SkillTree';
 import Papa from 'papaparse';
+import { createClient } from '@supabase/supabase-js'
+
+// Create a single supabase client for interacting with your database
+console.log(process.env)
+const supabase = createClient(process.env.DATABASE_URL, process.env.DATABASE_API_KEY)
+
+async function getSkills() {
+  const skills = await supabase.from('Skills').select()
+  return skills.data
+}
 
 function App() {
+
   const [skillsData, setSkillsData] = useState([]);
   let [selectedArchetype, setSelectedArchetype] = useState(0);
 
   useEffect(() => {
-    fetch(`${process.env.PUBLIC_URL}/skills.csv`)
-      .then((response) => response.text())
-      .then((csv) => {
-        // Parse the CSV
-        const results = Papa.parse(csv, {
-          header: true,
-          dynamicTyping: true,
-          delimiter: ",",
-          newline: "\n"
+    if (process.env.NODE_ENV === 'production') {
+      fetch(`${process.env.PUBLIC_URL}/skills.csv`)
+        .then((response) => response.text())
+        .then((csv) => {
+          // Parse the CSV
+          const results = Papa.parse(csv, {
+            header: true,
+            dynamicTyping: true,
+            delimiter: ",",
+            newline: "\n"
+          });
+          console.log(process.env.PUBLIC_URL)
+          console.log(results)
+
+          // Transform the data into an array of objects
+          const data = results.data.slice(0, -1).map((row) => ({
+            name: row.name,
+            archetype: row.archetype,
+            prerequisite: row.prerequisite,
+            casting_time: row.casting_time,
+            range: row.range,
+            duration: row.duration,
+            uses: row.uses,
+            has_active: row.has_active,
+            has_passive: row.has_passive,
+            description: row.description,
+          }));
+
+          setSkillsData(data);
+
+          console.log(data)
+
+          setSelectedArchetype(data[0].archetype)
         });
-        console.log(process.env.PUBLIC_URL)
-        console.log(results)
-
-        // Transform the data into an array of objects
-        const data = results.data.slice(0, -1).map((row) => ({
-          name: row.name,
-          archetype: row.archetype,
-          prerequisite: row.prerequisite,
-          casting_time: row.casting_time,
-          range: row.range,
-          duration: row.duration,
-          uses: row.uses,
-          has_active: row.has_active,
-          has_passive: row.has_passive,
-          description: row.description,
-        }));
-
+    }
+    else {
+      (async () => {
+        return getSkills();
+      })().then((data) => {
         setSkillsData(data);
-
         console.log(data)
-
         setSelectedArchetype(data[0].archetype)
-      });
+      })
+    }
   }, []);
+
 
   const skillGroups = skillsData.reduce((groups, skill) => {
     const { archetype } = skill;
