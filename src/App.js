@@ -7,7 +7,7 @@ import { createClient } from '@supabase/supabase-js'
 let supabase = null
 
 if (process.env.NODE_ENV === 'production') {
-  console.log(process.env.DATABASE_URL)
+  console.log(process.env)
   supabase = createClient(process.env.DATABASE_URL, process.env.DATABASE_API_KEY)
 }
 
