@@ -8,7 +8,7 @@ let supabase = null
 
 if (process.env.NODE_ENV === 'production') {
   console.log(process.env)
-  supabase = createClient(process.env.DATABASE_URL, process.env.DATABASE_API_KEY)
+  supabase = createClient(process.env.REACT_APP_DATABASE_URL, process.env.REACT_APP_DATABASE_API_KEY)
 }
 
 
