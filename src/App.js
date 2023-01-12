@@ -12,7 +12,7 @@ if (process.env.NODE_ENV === 'production') {
 
 
 async function getSkills() {
-  const skills = await supabase.from('Skills').select().order('name', { ascending: false })
+  const skills = await supabase.from('Skills').select().order('name', { ascending: true })
   return skills.data
 }
 
