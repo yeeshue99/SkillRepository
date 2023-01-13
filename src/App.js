@@ -18,8 +18,8 @@ async function getSkills() {
 
 function App() {
 
-  const [skillsData, setSkillsData] = useState([]);
-  let [selectedArchetype, setSelectedArchetype] = useState(0);
+  const [skillGroups, setSkillGroups] = useState([]);
+  const [selectedArchetype, setSelectedArchetype] = useState(-1);
 
   useEffect(() => {
     document.title = 'Skill Browser';
@@ -33,10 +33,8 @@ function App() {
             header: true,
             dynamicTyping: true,
             delimiter: ",",
-            newline: "\n"
+            newline: "\r\n"
           });
-          console.log(process.env.PUBLIC_URL)
-          console.log(results)
 
           // Transform the data into an array of objects
           const data = results.data.slice(0, -1).map((row) => ({
@@ -52,33 +50,68 @@ function App() {
             description: row.description,
           }));
 
-          setSkillsData(data);
-
-          console.log(data)
-
           setSelectedArchetype(data[0].archetype)
+          let skillGroupData = data.reduce((groups, skill) => {
+            const { archetype } = skill;
+            if (!groups[archetype]) {
+              groups[archetype] = [];
+            }
+            groups[archetype].push(skill);
+            return groups;
+          }, {});
+
+          setSkillGroups(skillGroupData);
         });
     }
     else {
       (async () => {
         return getSkills();
       })().then((data) => {
-        setSkillsData(data);
-        console.log(data)
-        setSelectedArchetype(data[0].archetype)
+        if (selectedArchetype === -1) setSelectedArchetype(data[0].archetype);
+
+        let skillGroupData = data.reduce((groups, skill) => {
+          const { archetype } = skill;
+          if (!groups[archetype]) {
+            groups[archetype] = [];
+          }
+          groups[archetype].push(skill);
+          return groups;
+        }, {});
+
+        setSkillGroups(skillGroupData);
+
+        const handlePayload = (payload) => {
+          (async () => {
+            return getSkills();
+          })().then((data) => {
+            let skillGroupData = data.reduce((groups, skill) => {
+              const { archetype } = skill;
+              if (!groups[archetype]) {
+                groups[archetype] = [];
+              }
+              groups[archetype].push(skill);
+              return groups;
+            }, {});
+
+            setSkillGroups(skillGroupData);
+          })
+        }
+
+
+        const connection = supabase
+          .channel('public:Skills')
+          .on('postgres_changes', { event: '*', schema: 'public', table: 'Skills' }, payload => {
+            handlePayload(payload)
+          })
+          .subscribe()
+          ;
+
+        return () => {
+          connection.unsubscribe()
+        }
       })
     }
-  }, []);
-
-
-  const skillGroups = skillsData.reduce((groups, skill) => {
-    const { archetype } = skill;
-    if (!groups[archetype]) {
-      groups[archetype] = [];
-    }
-    groups[archetype].push(skill);
-    return groups;
-  }, {});
+  }, [selectedArchetype]);
 
   // Function to cycle through the archetypes
   const handleArchetypeCycleBackwards = () => {
@@ -107,6 +140,35 @@ function App() {
     setSelectedArchetype(archetypes[nextIndex]);
   };
 
+  function downloadCSV() {
+    let data = null
+    if (process.env.NODE_ENV === 'production') {
+      (async () => {
+        return getSkills();
+      })().then((dataIn) => {
+        data = dataIn
+        console.log(data)
+        if (data !== null) {
+          var csv = Papa.unparse(data)
+
+          var csvData = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+          var csvURL = null;
+          if (navigator.msSaveBlob) {
+            csvURL = navigator.msSaveBlob(csvData, 'download.csv');
+          }
+          else {
+            csvURL = window.URL.createObjectURL(csvData);
+          }
+
+          var testLink = document.createElement('a');
+          testLink.href = csvURL;
+          testLink.setAttribute('test', 'test.csv');
+          testLink.click();
+        }
+      })
+    }
+  }
+
   return (
     <div>
       <button onClick={handleArchetypeCycleBackwards}>Previous archetype</button>
@@ -123,6 +185,7 @@ function App() {
           ))}
         </select>
       </div>
+      {process.env.NODE_ENV === 'production' && <button onClick={downloadCSV}>Download Skill CSV</button>}
       <SkillTree
         data={skillGroups}
         selectedArchetype={selectedArchetype}
