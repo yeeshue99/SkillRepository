@@ -20,6 +20,7 @@ function App() {
 
   const [skillGroups, setSkillGroups] = useState([]);
   const [selectedArchetype, setSelectedArchetype] = useState(-1);
+  const [checked, setChecked] = React.useState(false);
 
   useEffect(() => {
     document.title = 'Skill Browser';
@@ -50,7 +51,8 @@ function App() {
             description: row.description,
           }));
 
-          setSelectedArchetype(data[0].archetype)
+          if (selectedArchetype === -1) setSelectedArchetype(data[0].archetype);
+
           let skillGroupData = data.reduce((groups, skill) => {
             const { archetype } = skill;
             if (!groups[archetype]) {
@@ -111,7 +113,7 @@ function App() {
         }
       })
     }
-  }, [selectedArchetype]);
+  }, [selectedArchetype, checked]);
 
   // Function to cycle through the archetypes
   const handleArchetypeCycleBackwards = () => {
@@ -169,6 +171,10 @@ function App() {
     }
   }
 
+  const handleChange = () => {
+    setChecked(!checked);
+  };
+
   return (
     <div>
       <button onClick={handleArchetypeCycleBackwards}>Previous archetype</button>
@@ -186,9 +192,15 @@ function App() {
         </select>
       </div>
       {process.env.NODE_ENV === 'production' && <button onClick={downloadCSV}>Download Skill CSV</button>}
+      <label>
+        <input type="checkbox" checked={checked}
+          onChange={handleChange} />
+        Show all descriptions
+      </label>
       <SkillTree
         data={skillGroups}
         selectedArchetype={selectedArchetype}
+        checked={checked}
       />
     </div>
   );

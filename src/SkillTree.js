@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './SkillTree.css';
 
-function SkillTree({ data, selectedArchetype }) {
+function SkillTree({ data, selectedArchetype, checked }) {
     // Create a skill card component
     const SkillCard = ({ skill }) => {
         const [isHovered, setIsHovered] = useState(false);
@@ -16,7 +16,7 @@ function SkillTree({ data, selectedArchetype }) {
                 onMouseLeave={handleMouseLeave}
             >
                 <div className="skill-name">{skill.name}</div>
-                {isHovered && (
+                {(isHovered || checked) && (
                     <div>
                         <div className="skill-prerequisite">Prerequisite: {skill.prerequisite}</div>
                         <div className="skill-description">{skill.description}</div>
@@ -34,7 +34,7 @@ function SkillTree({ data, selectedArchetype }) {
                     <div className="archetype-name">{archetype}</div>
                     <div className="skills">
                         {skills.map((skill) => (
-                            <SkillCard key={skill.name} skill={skill} />
+                            <SkillCard key={skill.name} skill={skill} checked={checked} />
                         ))}
                     </div>
                 </div>
