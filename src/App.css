@@ -2,7 +2,8 @@ body {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
-  background-color: #CCD5AE;
+  color: var(--text-color);
+  background-color: var(--primary-color);
 }
 
 .app {
@@ -16,8 +17,8 @@ body {
 
 /* Archetype Button Styles */
 .archetype-button {
-  background-color: #E9EDC9;
-  color: #000;
+  background-color: var(--secondary-color);
+  color: var(--text-color);
   border-radius: 5px;
   padding: 10px 15px;
   font-size: 16px;
@@ -29,7 +30,7 @@ body {
 }
 
 .archetype-button:hover {
-  background-color: #FEFAE0;
+  background-color: var(--tertiary-color);
   cursor: pointer;
 }
 
@@ -40,8 +41,8 @@ body {
 
 /* Archetype Select Styles */
 .archetype-select {
-  background-color: #CCD5AE;
-  color: #000;
+  background-color: var(--primary-color);
+  color: var(--text-color);
   border-radius: 5px;
   padding: 10px 15px;
   font-size: 16px;
@@ -69,8 +70,8 @@ input[type="checkbox"] {
 
 /* CSV Button Styles */
 .csv-button {
-  background-color: #D4A373;
-  color: #000;
+  background-color: var(--quinary-color);
+  color: var(--text-color);
   border-radius: 5px;
   padding: 10px 15px;
   font-size: 16px;
@@ -83,5 +84,24 @@ input[type="checkbox"] {
 
 .csv-button:hover {
   background-color: #ebb682;
+  cursor: pointer;
+}
+
+/* Dark Mode Styles */
+.dark-button {
+  background-color: var(--secondary-color);
+  color: var(--text-color);
+  border-radius: 5px;
+  padding: 10px 15px;
+  font-size: 16px;
+  font-weight: bold;
+  margin: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: background-color 0.3s ease;
+}
+
+.dark-button:hover {
+  background-color: var(--tertiary-color);
   cursor: pointer;
 }

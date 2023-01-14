@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import './root.css';
 import './SkillTree.css';
 
 function SkillTree({ data, selectedArchetype, checked }) {

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import SkillTree from './SkillTree';
 import Papa from 'papaparse';
 import { createClient } from '@supabase/supabase-js'
+import './root.css';
 import './App.css';
 
 
@@ -177,13 +178,16 @@ function App() {
     setChecked(!checked);
   };
 
+  const darkModeToggle = () => {
+    document.documentElement.classList.toggle("dark-mode");
+  }
+
   return (
     <div className='app'>
       <div className='app'>
         <button className="archetype-button borderless" onClick={handleArchetypeCycleBackwards}>Previous archetype</button>
         <button className="archetype-button borderless" onClick={handleArchetypeCycleForwards}>Next archetype</button>
-        <br />
-        <br />
+
 
         <div>
           <label htmlFor="archetype-select">Select an archetype:</label>
@@ -198,7 +202,7 @@ function App() {
             ))}
           </select>
         </div>
-        <br />
+
         <div className="show-description">
           <label>
             <input type="checkbox" checked={checked}
@@ -206,10 +210,12 @@ function App() {
             Show all descriptions
           </label>
         </div>
-        <br />
-        <br />
+
 
         {process.env.NODE_ENV === 'production' && <button className="csv-button" onClick={downloadCSV}>Download Skill CSV</button>}
+
+        <button className="archetype-button borderless" onClick={darkModeToggle}>Dark Mode</button>
+
       </div>
       <div className='app'>
         <SkillTree

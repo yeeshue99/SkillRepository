@@ -1,0 +1,19 @@
+:root {
+    --primary-color: #CCD5AE;
+    --secondary-color: #E9EDC9;
+    --tertiary-color: #FEFAE0;
+    --quaternary-color: #FAEDCD;
+    --quinary-color: #D4A373;
+    --text-color: #000;
+    --background-color: #000;
+}
+
+.dark-mode {
+    --primary-color: #424549;
+    --secondary-color: #36393e;
+    --tertiary-color: #282b30;
+    --quaternary-color: #1e2124;
+    --quinary-color: #7289da;
+    --text-color: #ECFFFF;
+    --background-color: #fff;
+}

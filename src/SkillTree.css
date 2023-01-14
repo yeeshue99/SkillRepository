@@ -3,7 +3,7 @@ body {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
-  background-color: #ffffff;
+  background-color: var(--background-color)fff;
 }
 
 /* Skill Tree Styles */
@@ -19,7 +19,7 @@ body {
   flex: 1;
   margin: 10px;
   padding: 20px;
-  background-color: #FAEDCD;
+  background-color: var(--quaternary-color);
   border-radius: 5px;
 }
 
@@ -35,7 +35,7 @@ body {
 
 /* Skill Card Styles */
 .skill-card {
-  background-color: #E9EDC9;
+  background-color: var(--secondary-color);
   border-radius: 5px;
   padding: 10px;
   margin-bottom: 10px;
@@ -43,7 +43,7 @@ body {
 }
 
 .skill-card:hover {
-  background-color: #CCD5AE;
+  background-color: var(--primary-color);
   cursor: pointer;
 }
 
