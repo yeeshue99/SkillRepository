@@ -191,7 +191,7 @@ function App() {
             id="archetype-select"
             value={selectedArchetype}
             onChange={(event) => setSelectedArchetype(event.target.value)}
-            className="archetype-button archetype-select"
+            className="archetype-select"
           >
             {Object.keys(skillGroups).map((archetype, skill) => (
               <option key={archetype} value={archetype}>{archetype}</option>
