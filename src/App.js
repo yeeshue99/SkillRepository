@@ -203,6 +203,7 @@ function App() {
           </select>
         </div>
 
+        <button className="archetype-button borderless" onClick={darkModeToggle}>Dark Mode</button>
         <div className="show-description">
           <label>
             <input type="checkbox" checked={checked}
@@ -214,7 +215,6 @@ function App() {
 
         {process.env.NODE_ENV === 'production' && <button className="csv-button" onClick={downloadCSV}>Download Skill CSV</button>}
 
-        <button className="archetype-button borderless" onClick={darkModeToggle}>Dark Mode</button>
 
       </div>
       <div className='app'>
