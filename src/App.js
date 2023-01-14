@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import SkillTree from './SkillTree';
 import Papa from 'papaparse';
 import { createClient } from '@supabase/supabase-js'
+import './App.css';
+
 
 // Create a single supabase client for interacting with your database
 let supabase = null
@@ -176,32 +178,47 @@ function App() {
   };
 
   return (
-    <div>
-      <button onClick={handleArchetypeCycleBackwards}>Previous archetype</button>
-      <button onClick={handleArchetypeCycleForwards}>Next archetype</button>
-      <div>
-        <label htmlFor="archetype-select">Select an archetype:</label>
-        <select
-          id="archetype-select"
-          value={selectedArchetype}
-          onChange={(event) => setSelectedArchetype(event.target.value)}
-        >
-          {Object.keys(skillGroups).map((archetype, skill) => (
-            <option key={archetype} value={archetype}>{archetype}</option>
-          ))}
-        </select>
+    <div className='app'>
+      <div className='app'>
+        <button className="archetype-button borderless" onClick={handleArchetypeCycleBackwards}>Previous archetype</button>
+        <button className="archetype-button borderless" onClick={handleArchetypeCycleForwards}>Next archetype</button>
+        <br />
+        <br />
+
+        <div>
+          <label htmlFor="archetype-select">Select an archetype:</label>
+          <select
+            id="archetype-select"
+            value={selectedArchetype}
+            onChange={(event) => setSelectedArchetype(event.target.value)}
+            className="archetype-button archetype-select"
+          >
+            {Object.keys(skillGroups).map((archetype, skill) => (
+              <option key={archetype} value={archetype}>{archetype}</option>
+            ))}
+          </select>
+        </div>
+        <br />
+        <div className="show-description">
+          <label>
+            <input type="checkbox" checked={checked}
+              onChange={handleChange} className="show-description" />
+            Show all descriptions
+          </label>
+        </div>
+        <br />
+        <br />
+
+        {process.env.NODE_ENV === 'production' && <button className="csv-button" onClick={downloadCSV}>Download Skill CSV</button>}
       </div>
-      {process.env.NODE_ENV === 'production' && <button onClick={downloadCSV}>Download Skill CSV</button>}
-      <label>
-        <input type="checkbox" checked={checked}
-          onChange={handleChange} />
-        Show all descriptions
-      </label>
-      <SkillTree
-        data={skillGroups}
-        selectedArchetype={selectedArchetype}
-        checked={checked}
-      />
+      <div className='app'>
+        <SkillTree
+          data={skillGroups}
+          selectedArchetype={selectedArchetype}
+          checked={checked}
+        />
+      </div>
+
     </div>
   );
 }

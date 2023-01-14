@@ -1,72 +1,64 @@
-.skill-tree {
-  display: flex;
-  flex-direction: column;
+/* Global Styles */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #ffffff;
 }
 
-.archetype {
+/* Skill Tree Styles */
+.skill-tree {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
+  width: 100%;
+
+}
+
+/* Archetype Styles */
+.archetype {
+  flex: 1;
+  margin: 10px;
+  padding: 20px;
+  background-color: #FAEDCD;
+  border-radius: 5px;
 }
 
 .archetype-name {
-  font-size: 1.5em;
+  font-size: 20px;
   font-weight: bold;
-  margin-bottom: 0.5em;
-}
-
-.skills {
-  display: flex;
-  flex-wrap: wrap;
-}
-
-.skill-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  margin: 0.5em;
-  padding: 0.5em;
-  width: 300px;
-  height: 200px;
-  background-color: rgb(183, 190, 197);
-  padding-bottom: 1.5em;
-  position: relative;
-}
-
-.skill-card:hover {
-  transform: scale(1.05);
-  background-color: rgb(227, 228, 230);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, .12), 0 4px 8px rgba(0, 0, 0, .06);
-}
-
-.skill-name {
-  font-size: 1.2em;
-  font-weight: bold;
-  text-align: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-
-.skill-card:hover .skill-name {
-  top: 0.5em;
-}
-
-
-.skill-prerequisite {
-  font-size: 0.8em;
-  font-style: italic;
-  margin-bottom: 0.5em;
-}
-
-.skill-description {
-  font-size: 0.8em;
-  max-height: 145px;
-  overflow: auto;
+  margin-bottom: 10px;
 }
 
 .hidden {
   display: none;
+}
+
+/* Skill Card Styles */
+.skill-card {
+  background-color: #E9EDC9;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+  transition: background-color 0.3s ease;
+}
+
+.skill-card:hover {
+  background-color: #CCD5AE;
+  cursor: pointer;
+}
+
+.skill-name {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.skill-prerequisite {
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+.skill-description {
+  font-size: 16px;
+  margin: 0 10px;
 }
