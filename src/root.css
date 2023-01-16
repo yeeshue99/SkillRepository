@@ -8,6 +8,16 @@
     --background-color: #000;
 }
 
+.melon {
+    --primary-color: #CCD5AE;
+    --secondary-color: #E9EDC9;
+    --tertiary-color: #FEFAE0;
+    --quaternary-color: #FAEDCD;
+    --quinary-color: #D4A373;
+    --text-color: #000;
+    --background-color: #000;
+}
+
 .dark-mode {
     --primary-color: #424549;
     --secondary-color: #36393e;
@@ -16,4 +26,24 @@
     --quinary-color: #7289da;
     --text-color: #ECFFFF;
     --background-color: #fff;
+}
+
+.earth-tones {
+    --primary-color: #606C38;
+    --secondary-color: #283618;
+    --tertiary-color: #DDA15E;
+    --quaternary-color: #DDA15E;
+    --quinary-color: #BC6C25;
+    --text-color: #ECFFFF;
+    --background-color: #fff;
+}
+
+.bubblegum {
+    --primary-color: #cdb4db;
+    --secondary-color: #ffc8dd;
+    --tertiary-color: #ffafcc;
+    --quaternary-color: #bde0fe;
+    --quinary-color: #a2d2ff;
+    --text-color: #000;
+    --background-color: #000;
 }

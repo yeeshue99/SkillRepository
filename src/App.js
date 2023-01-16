@@ -13,6 +13,8 @@ if (process.env.NODE_ENV === 'production') {
   supabase = createClient(process.env.REACT_APP_DATABASE_URL, process.env.REACT_APP_DATABASE_API_KEY)
 }
 
+const installedColorSchemes = ["melon", "dark-mode", "earth-tones", "bubblegum"]
+
 
 async function getSkills() {
   const skills = await supabase.from('Skills').select().order('name', { ascending: true })
@@ -20,14 +22,36 @@ async function getSkills() {
   return skills.data
 }
 
+
 function App() {
 
   const [skillGroups, setSkillGroups] = useState([]);
   const [selectedArchetype, setSelectedArchetype] = useState(-1);
   const [checked, setChecked] = React.useState(false);
+  const [colorScheme, setSelectedColorScheme] = useState(() => {
+    const saved = localStorage.getItem("colorScheme");
+    const initialValue = JSON.parse(saved);
+    return initialValue || "melon";
+  });
+
 
   useEffect(() => {
+    function assignColorScheme() {
+      installedColorSchemes.forEach(element => {
+        if (colorScheme === element) {
+          document.documentElement.classList.add(element);
+        }
+        else {
+          document.documentElement.classList.remove(element);
+        }
+
+      });
+    }
     document.title = 'Skill Browser';
+
+    localStorage.setItem("colorScheme", JSON.stringify(colorScheme));
+
+    assignColorScheme()
 
     if (process.env.NODE_ENV === 'production') {
       (async () => {
@@ -118,7 +142,7 @@ function App() {
           setSkillGroups(skillGroupData);
         });
     }
-  }, [selectedArchetype, checked]);
+  }, [selectedArchetype, checked, colorScheme]);
 
   // Function to cycle through the archetypes
   const handleArchetypeCycleBackwards = () => {
@@ -177,9 +201,6 @@ function App() {
     setChecked(!checked);
   };
 
-  const darkModeToggle = () => {
-    document.documentElement.classList.toggle("dark-mode");
-  }
 
   return (
     <div className='app'>
@@ -202,7 +223,13 @@ function App() {
           </select>
         </div>
 
-        <button className="archetype-button borderless" onClick={darkModeToggle}>Dark Mode</button>
+        <select
+          id="color-scheme-select"
+          value={colorScheme}
+          onChange={(event) => setSelectedColorScheme(event.target.value)}
+          className="archetype-button borderless">{installedColorSchemes.map(scheme => <option key={scheme} value={scheme}>{scheme}</option>)}</select>
+
+
         <div className="show-description">
           <label>
             <input type="checkbox" checked={checked}
