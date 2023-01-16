@@ -16,6 +16,7 @@ if (process.env.NODE_ENV === 'production') {
 
 async function getSkills() {
   const skills = await supabase.from('Skills').select().order('name', { ascending: true })
+  console.log("Fetched supabase")
   return skills.data
 }
 
@@ -28,47 +29,7 @@ function App() {
   useEffect(() => {
     document.title = 'Skill Browser';
 
-    if (process.env.NODE_ENV !== 'production') {
-      fetch(`${process.env.PUBLIC_URL}/skills.csv`)
-        .then((response) => response.text())
-        .then((csv) => {
-          // Parse the CSV
-          const results = Papa.parse(csv, {
-            header: true,
-            dynamicTyping: true,
-            delimiter: ",",
-            newline: "\r\n"
-          });
-
-          // Transform the data into an array of objects
-          const data = results.data.slice(0, -1).map((row) => ({
-            name: row.name,
-            archetype: row.archetype,
-            prerequisite: row.prerequisite,
-            casting_time: row.casting_time,
-            range: row.range,
-            duration: row.duration,
-            uses: row.uses,
-            has_active: row.has_active,
-            has_passive: row.has_passive,
-            description: row.description,
-          }));
-
-          if (selectedArchetype === -1) setSelectedArchetype(data[0].archetype);
-
-          let skillGroupData = data.reduce((groups, skill) => {
-            const { archetype } = skill;
-            if (!groups[archetype]) {
-              groups[archetype] = [];
-            }
-            groups[archetype].push(skill);
-            return groups;
-          }, {});
-
-          setSkillGroups(skillGroupData);
-        });
-    }
-    else {
+    if (process.env.NODE_ENV === 'production') {
       (async () => {
         return getSkills();
       })().then((data) => {
@@ -116,6 +77,47 @@ function App() {
         }
       })
     }
+    else {
+
+      fetch(`${process.env.PUBLIC_URL}/skills.csv`)
+        .then((response) => response.text())
+        .then((csv) => {
+          // Parse the CSV
+          const results = Papa.parse(csv, {
+            header: true,
+            dynamicTyping: true,
+            delimiter: ",",
+            newline: "\r\n"
+          });
+
+          // Transform the data into an array of objects
+          const data = results.data.slice(0, -1).map((row) => ({
+            name: row.name,
+            archetype: row.archetype,
+            prerequisite: row.prerequisite,
+            casting_time: row.casting_time,
+            range: row.range,
+            duration: row.duration,
+            uses: row.uses,
+            has_active: row.has_active,
+            has_passive: row.has_passive,
+            description: row.description,
+          }));
+
+          if (selectedArchetype === -1) setSelectedArchetype(data[0].archetype);
+
+          let skillGroupData = data.reduce((groups, skill) => {
+            const { archetype } = skill;
+            if (!groups[archetype]) {
+              groups[archetype] = [];
+            }
+            groups[archetype].push(skill);
+            return groups;
+          }, {});
+
+          setSkillGroups(skillGroupData);
+        });
+    }
   }, [selectedArchetype, checked]);
 
   // Function to cycle through the archetypes
@@ -146,13 +148,10 @@ function App() {
   };
 
   function downloadCSV() {
-    let data = null
     if (process.env.NODE_ENV === 'production') {
       (async () => {
         return getSkills();
-      })().then((dataIn) => {
-        data = dataIn
-        console.log(data)
+      })().then((data) => {
         if (data !== null) {
           var csv = Papa.unparse(data)
 
