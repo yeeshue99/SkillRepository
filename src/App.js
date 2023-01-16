@@ -13,7 +13,7 @@ if (process.env.NODE_ENV === 'production') {
   supabase = createClient(process.env.REACT_APP_DATABASE_URL, process.env.REACT_APP_DATABASE_API_KEY)
 }
 
-const installedColorSchemes = ["melon", "dark-mode", "earth-tones", "bubblegum"]
+const installedColorSchemes = ["melon", "dark-mode", "earth-tones", "bubblegum", "peach", "mint"]
 
 
 async function getSkills() {

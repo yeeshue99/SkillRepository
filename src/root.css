@@ -15,7 +15,6 @@
     --quaternary-color: #FAEDCD;
     --quinary-color: #D4A373;
     --text-color: #000;
-    --background-color: #000;
 }
 
 .dark-mode {
@@ -25,7 +24,6 @@
     --quaternary-color: #1e2124;
     --quinary-color: #7289da;
     --text-color: #ECFFFF;
-    --background-color: #fff;
 }
 
 .earth-tones {
@@ -35,7 +33,6 @@
     --quaternary-color: #DDA15E;
     --quinary-color: #BC6C25;
     --text-color: #ECFFFF;
-    --background-color: #fff;
 }
 
 .bubblegum {
@@ -45,5 +42,22 @@
     --quaternary-color: #bde0fe;
     --quinary-color: #a2d2ff;
     --text-color: #000;
-    --background-color: #000;
+}
+
+.peach {
+    --primary-color: #ffd289;
+    --secondary-color: #facc6b;
+    --tertiary-color: #ffd131;
+    --quaternary-color: #f5b82e;
+    --quinary-color: #f4ac32;
+    --text-color: #000;
+}
+
+.mint {
+    --primary-color: #bee6ce;
+    --secondary-color: #bcffdb;
+    --tertiary-color: #8dffcd;
+    --quaternary-color: #68d89b;
+    --quinary-color: #4f9d69;
+    --text-color: #000;
 }
