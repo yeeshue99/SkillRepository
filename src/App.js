@@ -25,6 +25,7 @@ async function getSkills() {
 
 function App() {
 
+  const [fetchedSkills, setFetchedSkills] = useState(false);
   const [skillGroups, setSkillGroups] = useState([]);
   const [selectedArchetype, setSelectedArchetype] = useState(-1);
   const [checked, setChecked] = React.useState(false);
@@ -52,6 +53,10 @@ function App() {
     localStorage.setItem("colorScheme", JSON.stringify(colorScheme));
 
     assignColorScheme()
+
+    if (!fetchedSkills){
+      return;
+    }
 
     if (process.env.NODE_ENV === 'production') {
       (async () => {
@@ -142,7 +147,9 @@ function App() {
           setSkillGroups(skillGroupData);
         });
     }
-  }, [selectedArchetype, checked, colorScheme]);
+
+    setFetchedSkills(true);
+  }, [selectedArchetype, checked, colorScheme. fetchedSkills]);
 
   // Function to cycle through the archetypes
   const handleArchetypeCycleBackwards = () => {
