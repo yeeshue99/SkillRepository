@@ -54,7 +54,7 @@ function App() {
 
     assignColorScheme()
 
-    if (!fetchedSkills){
+    if (fetchedSkills) {
       return;
     }
 
@@ -149,7 +149,7 @@ function App() {
     }
 
     setFetchedSkills(true);
-  }, [selectedArchetype, checked, colorScheme. fetchedSkills]);
+  }, [selectedArchetype, checked, colorScheme, fetchedSkills]);
 
   // Function to cycle through the archetypes
   const handleArchetypeCycleBackwards = () => {
