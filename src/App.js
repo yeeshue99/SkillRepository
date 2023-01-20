@@ -27,8 +27,16 @@ function App() {
 
   const [fetchedSkills, setFetchedSkills] = useState(false);
   const [skillGroups, setSkillGroups] = useState([]);
-  const [selectedArchetype, setSelectedArchetype] = useState(-1);
-  const [checked, setChecked] = React.useState(false);
+  const [selectedArchetype, setSelectedArchetype] = useState(() => {
+    const saved = localStorage.getItem("selectedArchetype");
+    const initialValue = JSON.parse(saved);
+    return initialValue || -1;
+  });
+  const [checked, setChecked] = useState(() => {
+    const saved = localStorage.getItem("checked");
+    const initialValue = JSON.parse(saved);
+    return initialValue || false;
+  });
   const [colorScheme, setSelectedColorScheme] = useState(() => {
     const saved = localStorage.getItem("colorScheme");
     const initialValue = JSON.parse(saved);
@@ -50,6 +58,8 @@ function App() {
     }
     document.title = 'Skill Browser';
 
+    localStorage.setItem("selectedArchetype", JSON.stringify(selectedArchetype));
+    localStorage.setItem("checked", JSON.stringify(checked));
     localStorage.setItem("colorScheme", JSON.stringify(colorScheme));
 
     assignColorScheme()
@@ -116,7 +126,7 @@ function App() {
             header: true,
             dynamicTyping: true,
             delimiter: ",",
-            newline: "\r\n"
+            newline: "\n"
           });
 
           // Transform the data into an array of objects
