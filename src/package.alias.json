@@ -14,8 +14,6 @@
     "react-popup-alert": "^2.0.0",
     "react-router-dom": "^6.5.0",
     "react-scripts": "^5.0.1",
-    "sweetalert2": "^11.7.0",
-    "sweetalert2-react-content": "^5.0.7",
     "web-vitals": "^2.1.4"
   },
   "proxy": "http://localhost:3000",

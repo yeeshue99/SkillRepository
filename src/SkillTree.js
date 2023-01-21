@@ -1,20 +1,39 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './root.css';
 import './SkillTree.css';
 
 function SkillTree({ data, selectedArchetype, checked }) {
     // Create a skill card component
-    const SkillCard = ({ skill }) => {
+    const SkillCard = ({ skill, checked, rerender }) => {
         const [isHovered, setIsHovered] = useState(false);
+        const [learnedSkills] = useState(() => {
+            const saved = localStorage.getItem("learnedSkills");
+            const initialValue = JSON.parse(saved);
+            return initialValue || [];
+        })
+        const [active, setActive] = useState(true);
 
         const handleMouseEnter = () => setIsHovered(true);
         const handleMouseLeave = () => setIsHovered(false);
+        const handleMouseClick = () => {
+            const saved = localStorage.getItem("learnedSkills");
+            const initialValue = JSON.parse(saved);
+            initialValue.push(skill.name)
+            localStorage.setItem("learnedSkills", JSON.stringify(initialValue));
+            setActive(false)
+        }
+
+        useEffect(() => {
+            localStorage.setItem("learnedSkills", JSON.stringify(learnedSkills));
+            setActive(!learnedSkills.includes(skill.name))
+        }, [learnedSkills, skill.name])
 
         return (
             <div
-                className="skill-card"
+                className={`skill-card ${active ? '' : 'hidden'}`}
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
+                onClick={handleMouseClick}
             >
                 <div className="skill-name">{skill.name}</div>
                 {(isHovered || checked) && (
@@ -26,6 +45,8 @@ function SkillTree({ data, selectedArchetype, checked }) {
             </div>
         );
     };
+
+
 
     // Render the skill tree
     return (

@@ -2,10 +2,12 @@ import React, { useEffect, useState } from 'react';
 import SkillTree from './SkillTree';
 import Papa from 'papaparse';
 import { createClient } from '@supabase/supabase-js'
+import Swal from 'sweetalert2'
 import './root.css';
 import './App.css';
+import packageJson from './package.alias.json';
 
-
+const projectVersion = packageJson.version
 // Create a single supabase client for interacting with your database
 let supabase = null
 
@@ -42,7 +44,14 @@ function App() {
     const initialValue = JSON.parse(saved);
     return initialValue || "melon";
   });
+  const [version, setVersion] = useState(() => {
+    const saved = localStorage.getItem("version");
+    const initialValue = JSON.parse(saved);
+    return initialValue || "";
+  });
 
+  const [, updateState] = React.useState();
+  const forceUpdate = React.useCallback(() => updateState({}), []);
 
   useEffect(() => {
     function assignColorScheme() {
@@ -57,6 +66,13 @@ function App() {
       });
     }
     document.title = 'Skill Browser';
+
+    if (!(version === projectVersion)) {
+      setVersion(projectVersion)
+      Swal.fire('You can now click on skills to hide them! This can be used to exclude any skills you already own. These changes will persist through sessions, and can be reset using the SHOW HIDDEN SKILLS button.')
+    }
+
+    localStorage.setItem("version", JSON.stringify(version))
 
     localStorage.setItem("selectedArchetype", JSON.stringify(selectedArchetype));
     localStorage.setItem("checked", JSON.stringify(checked));
@@ -159,7 +175,7 @@ function App() {
     }
 
     setFetchedSkills(true);
-  }, [selectedArchetype, checked, colorScheme, fetchedSkills]);
+  }, [selectedArchetype, checked, colorScheme, fetchedSkills, version]);
 
   // Function to cycle through the archetypes
   const handleArchetypeCycleBackwards = () => {
@@ -218,7 +234,6 @@ function App() {
     setChecked(!checked);
   };
 
-
   return (
     <div className='app'>
       <div className='app'>
@@ -255,6 +270,11 @@ function App() {
           </label>
         </div>
 
+        <button className="archetype-button borderless" onClick={() => {
+          localStorage.setItem("learnedSkills", JSON.stringify([]))
+          forceUpdate()
+        }}>Show hidden skills</button>
+
 
         {process.env.NODE_ENV === 'production' && <button className="csv-button" onClick={downloadCSV}>Download Skill CSV</button>}
 
@@ -267,7 +287,6 @@ function App() {
           checked={checked}
         />
       </div>
-
     </div>
   );
 }
