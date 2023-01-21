@@ -38,7 +38,10 @@ function SkillTree({ data, selectedArchetype, checked }) {
                 <div className="skill-name">{skill.name}</div>
                 {(isHovered || checked) && (
                     <div>
-                        <div className="skill-prerequisite">Prerequisite: {skill.prerequisite}</div>
+                        <div className="skill-prerequisite"><b>Prerequisite:</b> {skill.prerequisite}</div>
+                        <div className="skill-prerequisite"><b>Casting Time:</b> {skill.casting_time}</div>
+                        <div className="skill-prerequisite"><b>Range:</b> {skill.range}</div>
+                        <div className="skill-prerequisite"><b>Duration:</b> {skill.duration}</div>
                         <div className="skill-description">{skill.description}</div>
                     </div>
                 )}
