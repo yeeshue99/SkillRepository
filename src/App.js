@@ -67,7 +67,7 @@ function App() {
     }
     document.title = 'Skill Browser';
 
-    if (!(version !== projectVersion)) {
+    if (!(version === version)) {
       setVersion(projectVersion)
       Swal.fire({
         title: `Version: ${projectVersion}`,
