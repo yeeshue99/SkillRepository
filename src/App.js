@@ -69,6 +69,7 @@ function App() {
 
     if (!(version === projectVersion)) {
       setVersion(version)
+      localStorage.setItem("version", JSON.stringify(projectVersion))
       Swal.fire({
         title: `Version: ${projectVersion}`,
         html: 'New in this version:<br>Themes:<br>earth-tones received a touch up! Now it looks more pleasing<br>the-bay makes its debut!<br><br>The functionality for hiding learned skills has been removed due to conflicts with the mobile version of this webpage.',
@@ -76,8 +77,7 @@ function App() {
       })
     }
 
-    localStorage.setItem("version", JSON.stringify(version))
-
+    // localStorage.setItem("version", JSON.stringify(version))
     localStorage.setItem("selectedArchetype", JSON.stringify(selectedArchetype));
     localStorage.setItem("checked", JSON.stringify(checked));
     localStorage.setItem("colorScheme", JSON.stringify(colorScheme));
