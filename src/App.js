@@ -67,8 +67,8 @@ function App() {
     }
     document.title = 'Skill Browser';
 
-    if (!(version === version)) {
-      setVersion(projectVersion)
+    if (!(version === projectVersion)) {
+      setVersion(version)
       Swal.fire({
         title: `Version: ${projectVersion}`,
         html: 'New in this version:<br>Themes:<br>earth-tones received a touch up! Now it looks more pleasing<br>the-bay makes its debut!<br><br>The functionality for hiding learned skills has been removed due to conflicts with the mobile version of this webpage.',
