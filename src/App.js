@@ -15,7 +15,7 @@ if (process.env.NODE_ENV === 'production') {
   supabase = createClient(process.env.REACT_APP_DATABASE_URL, process.env.REACT_APP_DATABASE_API_KEY)
 }
 
-const installedColorSchemes = ["melon", "dark-mode", "earth-tones", "bubblegum", "honey", "mint"]
+const installedColorSchemes = ["melon", "dark-mode", "earth-tones", "bubblegum", "honey", "mint", "the-bay"]
 
 
 async function getSkills() {
@@ -67,9 +67,13 @@ function App() {
     }
     document.title = 'Skill Browser';
 
-    if (!(version === projectVersion)) {
+    if (!(version !== projectVersion)) {
       setVersion(projectVersion)
-      Swal.fire('You can now click on skills to hide them! This can be used to exclude any skills you already own. These changes will persist through sessions, and can be reset using the SHOW HIDDEN SKILLS button.')
+      Swal.fire({
+        title: `Version: ${projectVersion}`,
+        html: 'New in this version:<br>Themes:<br>earth-tones received a touch up! Now it looks more pleasing<br>the-bay makes its debut!<br><br>The functionality for hiding learned skills has been removed due to conflicts with the mobile version of this webpage.',
+        width: "75%"
+      })
     }
 
     localStorage.setItem("version", JSON.stringify(version))
@@ -276,7 +280,7 @@ function App() {
         }}>Show hidden skills</button>
 
 
-        {process.env.NODE_ENV === 'production' && <button className="csv-button" onClick={downloadCSV}>Download Skill CSV</button>}
+        {process.env.NODE_ENV !== 'production' && <button className="csv-button" onClick={downloadCSV}>Download Skill CSV</button>}
 
 
       </div>
