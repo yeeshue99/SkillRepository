@@ -15,13 +15,13 @@ function SkillTree({ data, selectedArchetype, checked }) {
 
         const handleMouseEnter = () => setIsHovered(true);
         const handleMouseLeave = () => setIsHovered(false);
-        const handleMouseClick = () => {
-            const saved = localStorage.getItem("learnedSkills");
-            const initialValue = JSON.parse(saved);
-            initialValue.push(skill.name)
-            localStorage.setItem("learnedSkills", JSON.stringify(initialValue));
-            setActive(false)
-        }
+        // const handleMouseClick = () => {
+        //     const saved = localStorage.getItem("learnedSkills");
+        //     const initialValue = JSON.parse(saved);
+        //     initialValue.push(skill.name)
+        //     localStorage.setItem("learnedSkills", JSON.stringify(initialValue));
+        //     setActive(false)
+        // }
 
         useEffect(() => {
             localStorage.setItem("learnedSkills", JSON.stringify(learnedSkills));
@@ -33,7 +33,6 @@ function SkillTree({ data, selectedArchetype, checked }) {
                 className={`skill-card ${active ? '' : 'hidden'}`}
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
-                onClick={handleMouseClick}
             >
                 <div className="skill-name">{skill.name}</div>
                 {(isHovered || checked) && (
