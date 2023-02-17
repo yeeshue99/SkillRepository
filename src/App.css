@@ -1,58 +1,62 @@
 body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
   color: var(--text-color);
   background-color: var(--primary-color);
 }
 
 .app {
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  display: flex;
-  flex-wrap: wrap;
+  position: relative;
+  width: 75vw;
+  height: 75vh;
+  align-items: center;
+  display: grid;
+  /* flex-wrap: wrap; */
   justify-content: center;
 }
 
-/* Archetype Button Styles */
-.archetype-button {
+.nav-buttons,
+.skill-browser {
+  width: auto;
+  height: auto;
+}
+
+.nav-buttons {
+  display: grid;
+}
+
+.nav-buttons__set {
+  justify-content: center;
+  display: flex;
+}
+
+.clickable {
+  width: fit-content;
+  cursor: pointer;
   background-color: var(--secondary-color);
   color: var(--text-color);
   border-radius: 5px;
   padding: 10px 15px;
   font-size: 16px;
   font-weight: bold;
-  margin: 10px;
+  text-transform: uppercase;
   text-transform: uppercase;
   letter-spacing: 1px;
   transition: background-color 0.3s ease;
+  margin: 10px;
 }
 
-.archetype-button:hover {
+.clickable:hover {
   background-color: var(--tertiary-color);
   cursor: pointer;
 }
 
-/* Borderless Button Styles */
-.borderless {
-  border: none;
-}
+.archetype-button {}
 
-/* Archetype Select Styles */
+.archetype-button:hover {}
+
 .archetype-select {
-  background-color: var(--primary-color);
-  color: var(--text-color);
-  border-radius: 5px;
-  padding: 10px 15px;
-  font-size: 16px;
-  font-weight: bold;
-  margin: 10px;
-  letter-spacing: 1px;
-  transition: background-color 0.3s ease;
+  text-transform: none;
 }
 
-/* Checkbox Styles */
 input[type="checkbox"] {
   transform: scale(1.5);
   margin: 10px;
@@ -68,26 +72,10 @@ input[type="checkbox"] {
   letter-spacing: 1px;
 }
 
-/* CSV Button Styles */
 .csv-button {
   background-color: var(--quinary-color);
-  color: var(--text-color);
-  border-radius: 5px;
-  padding: 10px 15px;
-  font-size: 16px;
-  font-weight: bold;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  transition: background-color 0.3s ease;
-  margin: 10px;
 }
 
-.csv-button:hover {
-  background-color: var(--tertiary-color);
-  cursor: pointer;
-}
-
-/* Dark Mode Styles */
 .dark-button {
   background-color: var(--secondary-color);
   color: var(--text-color);

@@ -50,9 +50,6 @@ function App() {
     return initialValue || "";
   });
 
-  const [, updateState] = React.useState();
-  const forceUpdate = React.useCallback(() => updateState({}), []);
-
   useEffect(() => {
     function assignColorScheme() {
       installedColorSchemes.forEach(element => {
@@ -240,51 +237,53 @@ function App() {
 
   return (
     <div className='app'>
-      <div className='app'>
-        <button className="archetype-button borderless" onClick={handleArchetypeCycleBackwards}>Previous archetype</button>
-        <button className="archetype-button borderless" onClick={handleArchetypeCycleForwards}>Next archetype</button>
+      <div className='nav-buttons'>
+        <div className='nav-buttons__set'>
+          <button className="clickable borderless" onClick={handleArchetypeCycleBackwards}>Previous archetype</button>
+          <button className="clickable borderless" onClick={handleArchetypeCycleForwards}>Next archetype</button>
 
 
-        <div>
-          <label htmlFor="archetype-select">Select an archetype:</label>
-          <select
-            id="archetype-select"
-            value={selectedArchetype}
-            onChange={(event) => setSelectedArchetype(event.target.value)}
-            className="archetype-select"
-          >
-            {Object.keys(skillGroups).map((archetype, skill) => (
-              <option key={archetype} value={archetype}>{archetype}</option>
-            ))}
-          </select>
-        </div>
-
-        <select
-          id="color-scheme-select"
-          value={colorScheme}
-          onChange={(event) => setSelectedColorScheme(event.target.value)}
-          className="archetype-button borderless">{installedColorSchemes.map(scheme => <option key={scheme} value={scheme}>{scheme}</option>)}</select>
-
-
-        <div className="show-description">
-          <label>
-            <input type="checkbox" checked={checked}
-              onChange={handleChange} className="show-description" />
-            Show all descriptions
+          <label>Select an archetype:
+            <select
+              id="archetype-select"
+              value={selectedArchetype}
+              onChange={(event) => setSelectedArchetype(event.target.value)}
+              className="clickable archetype-select"
+            >
+              {Object.keys(skillGroups).map((archetype, skill) => (
+                <option key={archetype} value={archetype}>{archetype}</option>
+              ))}
+            </select>
           </label>
         </div>
 
-        <button className="archetype-button borderless" onClick={() => {
-          localStorage.setItem("learnedSkills", JSON.stringify([]))
-          forceUpdate()
-        }}>Show hidden skills</button>
+        <div className='nav-buttons__set'><select
+          id="color-scheme-select"
+          value={colorScheme}
+          onChange={(event) => setSelectedColorScheme(event.target.value)}
+          className="clickable">{installedColorSchemes.map(scheme => <option key={scheme} value={scheme}>{scheme}</option>)}</select>
 
+          <label className='clickable show-description'>
+            <input type="checkbox" checked={checked}
+              onChange={handleChange} className="clickable show-description" />
+            Show all descriptions
+          </label>
 
-        {process.env.NODE_ENV !== 'production' && <button className="csv-button" onClick={downloadCSV}>Download Skill CSV</button>}
+          {/* <button className="clickable" onClick={() => {
+            localStorage.setItem("learnedSkills", JSON.stringify([]));
+            forceUpdate();
+          }}>Show hidden skills</button> */}
+        </div>
+
+        <div className='nav-buttons__set'>
+
+          {process.env.NODE_ENV !== 'production' && <button className="clickable csv-button" onClick={downloadCSV}>Download Skill CSV</button>}
+        </div>
 
 
       </div>
-      <div className='app'>
+      <br />
+      <div className='skill-browser'>
         <SkillTree
           data={skillGroups}
           selectedArchetype={selectedArchetype}

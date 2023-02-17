@@ -4,7 +4,7 @@ import './SkillTree.css';
 
 function SkillTree({ data, selectedArchetype, checked }) {
     // Create a skill card component
-    const SkillCard = ({ skill, checked, rerender }) => {
+    const SkillCard = ({ skill, checked }) => {
         const [isHovered, setIsHovered] = useState(false);
         const [learnedSkills] = useState(() => {
             const saved = localStorage.getItem("learnedSkills");
@@ -37,10 +37,10 @@ function SkillTree({ data, selectedArchetype, checked }) {
                 <div className="skill-name">{skill.name}</div>
                 {(isHovered || checked) && (
                     <div>
-                        <div className="skill-prerequisite"><b>Prerequisite:</b> {skill.prerequisite}</div>
-                        <div className="skill-prerequisite"><b>Casting Time:</b> {skill.casting_time}</div>
-                        <div className="skill-prerequisite"><b>Range:</b> {skill.range}</div>
-                        <div className="skill-prerequisite"><b>Duration:</b> {skill.duration}</div>
+                        <div className="skill-info"><b>Prerequisite:</b> {skill.prerequisite}</div>
+                        <div className="skill-info"><b>Casting Time:</b> {skill.casting_time}</div>
+                        <div className="skill-info"><b>Range:</b> {skill.range}</div>
+                        <div className="skill-info"><b>Duration:</b> {skill.duration}</div>
                         <div className="skill-description">{skill.description}</div>
                     </div>
                 )}
@@ -58,7 +58,7 @@ function SkillTree({ data, selectedArchetype, checked }) {
                     <div className="archetype-name">{archetype}</div>
                     <div className="skills">
                         {skills.map((skill) => (
-                            <SkillCard key={skill.name} skill={skill} checked={checked} />
+                            <SkillCard skill={skill} checked={checked} />
                         ))}
                     </div>
                 </div>
