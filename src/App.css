@@ -9,14 +9,12 @@ body {
   height: 75vh;
   align-items: center;
   display: grid;
-  /* flex-wrap: wrap; */
   justify-content: center;
 }
 
 .nav-buttons,
 .skill-browser {
-  width: auto;
-  height: auto;
+  width: 100%;
 }
 
 .nav-buttons {
@@ -29,11 +27,11 @@ body {
 }
 
 .clickable {
-  width: fit-content;
+  width: auto;
   cursor: pointer;
   background-color: var(--secondary-color);
   color: var(--text-color);
-  border-radius: 5px;
+  /* border-radius: 5px; */
   padding: 10px 15px;
   font-size: 16px;
   font-weight: bold;
@@ -49,10 +47,6 @@ body {
   cursor: pointer;
 }
 
-.archetype-button {}
-
-.archetype-button:hover {}
-
 .archetype-select {
   text-transform: none;
 }
@@ -62,17 +56,7 @@ input[type="checkbox"] {
   margin: 10px;
 }
 
-.show-description {
-  border-radius: 5px;
-  padding: 10px 15px;
-  font-size: 16px;
-  font-weight: bold;
-  margin: 10px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-.csv-button {
+.alternate-button {
   background-color: var(--quinary-color);
 }
 

@@ -1,15 +1,13 @@
 .skill-tree {
-  display: flex;
-  flex-wrap: wrap;
   width: 75vw;
 }
 
 .archetype {
-  flex: 1;
   margin: 10px;
   padding: 20px;
   background-color: var(--quaternary-color);
   border-radius: 5px;
+  width: 75vw;
 }
 
 .archetype-name {
@@ -27,12 +25,17 @@
   border-radius: 5px;
   padding: 10px;
   margin-bottom: 10px;
-  transition: background-color 0.3s ease;
+  transition: height 0.5s ease-in, background-color 0.3s linear;
+  -webkit-transition: height 0.5s ease-in, background-color 0.3s ease-in;
+  height: 46px;
+  overflow: hidden;
 }
 
 .skill-card:hover {
   background-color: var(--primary-color);
   cursor: pointer;
+  height: 200px;
+  overflow: auto;
 }
 
 .skill-name {

@@ -5,9 +5,13 @@ import { createClient } from '@supabase/supabase-js'
 import Swal from 'sweetalert2'
 import './root.css';
 import './App.css';
-import packageJson from './package.alias.json';
+import cytoscape from 'cytoscape';
+import dagre from 'cytoscape-dagre';
 
-const projectVersion = packageJson.version
+cytoscape.use(dagre);
+
+const projectVersion = "0.2.4"
+
 // Create a single supabase client for interacting with your database
 let supabase = null
 
@@ -44,11 +48,7 @@ function App() {
     const initialValue = JSON.parse(saved);
     return initialValue || "melon";
   });
-  const [version, setVersion] = useState(() => {
-    const saved = localStorage.getItem("version");
-    const initialValue = JSON.parse(saved);
-    return initialValue || "";
-  });
+  const [showGraph, setShowGraph] = useState(false);
 
   useEffect(() => {
     function assignColorScheme() {
@@ -64,12 +64,16 @@ function App() {
     }
     document.title = 'Skill Browser';
 
+    const saved = localStorage.getItem("version");
+    const initialValue = JSON.parse(saved);
+    const version = initialValue || "";
+
     if (!(version === projectVersion)) {
-      setVersion(version)
       localStorage.setItem("version", JSON.stringify(projectVersion))
       Swal.fire({
         title: `Version: ${projectVersion}`,
-        html: 'New in this version:<br>Themes:<br>earth-tones received a touch up! Now it looks more pleasing<br>the-bay makes its debut!<br><br>The functionality for hiding learned skills has been removed due to conflicts with the mobile version of this webpage.',
+        // html: 'New in this version:<br>Graph view:<br>You can now view your skill tree as an actual tree! This should help with visualization of dependencies, as well as what you have available to you.',
+        html: 'New in this version:<br>Mobile Fix:<br>Fixed css issues for mobile.<br>Transition View:<br>Added functionality for an easier transition when viewing skills.',
         width: "75%"
       })
     }
@@ -176,7 +180,7 @@ function App() {
     }
 
     setFetchedSkills(true);
-  }, [selectedArchetype, checked, colorScheme, fetchedSkills, version]);
+  }, [selectedArchetype, checked, colorScheme, fetchedSkills, showGraph]);
 
   // Function to cycle through the archetypes
   const handleArchetypeCycleBackwards = () => {
@@ -231,19 +235,28 @@ function App() {
     }
   }
 
+  function toggleGraph() {
+    if (!showGraph) {
+
+    }
+    setShowGraph(!showGraph);
+  }
+
   const handleChange = () => {
     setChecked(!checked);
   };
 
   return (
-    <div className='app'>
-      <div className='nav-buttons'>
-        <div className='nav-buttons__set'>
-          <button className="clickable borderless" onClick={handleArchetypeCycleBackwards}>Previous archetype</button>
-          <button className="clickable borderless" onClick={handleArchetypeCycleForwards}>Next archetype</button>
+    <div>
+      {<div className='app'>
+        <div className='nav-buttons'>
+          <div className='nav-buttons__set'>
+            <button className="clickable borderless" onClick={handleArchetypeCycleBackwards}>Previous archetype</button>
+            <button className="clickable borderless" onClick={handleArchetypeCycleForwards}>Next archetype</button>
+          </div>
 
+          <div className='nav-buttons__set'>
 
-          <label>Select an archetype:
             <select
               id="archetype-select"
               value={selectedArchetype}
@@ -254,43 +267,47 @@ function App() {
                 <option key={archetype} value={archetype}>{archetype}</option>
               ))}
             </select>
-          </label>
-        </div>
+          </div>
 
-        <div className='nav-buttons__set'><select
-          id="color-scheme-select"
-          value={colorScheme}
-          onChange={(event) => setSelectedColorScheme(event.target.value)}
-          className="clickable">{installedColorSchemes.map(scheme => <option key={scheme} value={scheme}>{scheme}</option>)}</select>
+          <div className='nav-buttons__set'><select
+            id="color-scheme-select"
+            value={colorScheme}
+            onChange={(event) => setSelectedColorScheme(event.target.value)}
+            className="clickable">{installedColorSchemes.map(scheme => <option key={scheme} value={scheme}>{scheme}</option>)}</select>
 
-          <label className='clickable show-description'>
-            <input type="checkbox" checked={checked}
-              onChange={handleChange} className="clickable show-description" />
-            Show all descriptions
-          </label>
+            <label className='clickable'>
+              <input type="checkbox" checked={checked}
+                onChange={handleChange} className="clickable" />
+              Show all descriptions
+            </label>
 
-          {/* <button className="clickable" onClick={() => {
+            {/* <button className="clickable" onClick={() => {
             localStorage.setItem("learnedSkills", JSON.stringify([]));
             forceUpdate();
           }}>Show hidden skills</button> */}
+          </div>
+
+          <div className='nav-buttons__set'>
+            {process.env.NODE_ENV !== 'production' && <button className="clickable alternate-button" onClick={downloadCSV}>Download Skill CSV</button>}
+            {/* <button className="clickable alternate-button" onClick={toggleGraph}>Show graph for this archetype</button> */}
+          </div>
+
+
         </div>
+        <br />
+        {
 
-        <div className='nav-buttons__set'>
-
-          {process.env.NODE_ENV !== 'production' && <button className="clickable csv-button" onClick={downloadCSV}>Download Skill CSV</button>}
-        </div>
-
-
-      </div>
-      <br />
-      <div className='skill-browser'>
-        <SkillTree
-          data={skillGroups}
-          selectedArchetype={selectedArchetype}
-          checked={checked}
-        />
-      </div>
+          <div className='skill-browser'>
+            <SkillTree
+              data={skillGroups}
+              selectedArchetype={selectedArchetype}
+              checked={checked}
+            />
+          </div>
+        }
+      </div>}
     </div>
+
   );
 }
 

@@ -5,16 +5,12 @@ import './SkillTree.css';
 function SkillTree({ data, selectedArchetype, checked }) {
     // Create a skill card component
     const SkillCard = ({ skill, checked }) => {
-        const [isHovered, setIsHovered] = useState(false);
         const [learnedSkills] = useState(() => {
             const saved = localStorage.getItem("learnedSkills");
             const initialValue = JSON.parse(saved);
             return initialValue || [];
         })
         const [active, setActive] = useState(true);
-
-        const handleMouseEnter = () => setIsHovered(true);
-        const handleMouseLeave = () => setIsHovered(false);
         // const handleMouseClick = () => {
         //     const saved = localStorage.getItem("learnedSkills");
         //     const initialValue = JSON.parse(saved);
@@ -31,19 +27,15 @@ function SkillTree({ data, selectedArchetype, checked }) {
         return (
             <div
                 className={`skill-card ${active ? '' : 'hidden'}`}
-                onMouseEnter={handleMouseEnter}
-                onMouseLeave={handleMouseLeave}
             >
                 <div className="skill-name">{skill.name}</div>
-                {(isHovered || checked) && (
-                    <div>
-                        <div className="skill-info"><b>Prerequisite:</b> {skill.prerequisite}</div>
-                        <div className="skill-info"><b>Casting Time:</b> {skill.casting_time}</div>
-                        <div className="skill-info"><b>Range:</b> {skill.range}</div>
-                        <div className="skill-info"><b>Duration:</b> {skill.duration}</div>
-                        <div className="skill-description">{skill.description}</div>
-                    </div>
-                )}
+                <div className="expanded-skill">
+                    <div className="skill-info"><b>Prerequisite:</b> {skill.prerequisite}</div>
+                    <div className="skill-info"><b>Casting Time:</b> {skill.casting_time}</div>
+                    <div className="skill-info"><b>Range:</b> {skill.range}</div>
+                    <div className="skill-info"><b>Duration:</b> {skill.duration}</div>
+                    <div className="skill-description">{skill.description}</div>
+                </div>
             </div>
         );
     };
@@ -56,7 +48,7 @@ function SkillTree({ data, selectedArchetype, checked }) {
             {Object.entries(data).map(([archetype, skills]) => (
                 <div key={archetype} className={`archetype ${archetype === selectedArchetype ? '' : 'hidden'}`}>
                     <div className="archetype-name">{archetype}</div>
-                    <div className="skills">
+                    <div>
                         {skills.map((skill) => (
                             <SkillCard skill={skill} checked={checked} />
                         ))}
