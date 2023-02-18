@@ -12,9 +12,14 @@ body {
   justify-content: center;
 }
 
-.nav-buttons,
-.skill-browser {
+.nav-buttons {
+  margin-right: 12px;
   width: 100%;
+}
+
+.skill-browser {
+  margin: 12px;
+  padding: 12px;
 }
 
 .nav-buttons {

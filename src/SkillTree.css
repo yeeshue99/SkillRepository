@@ -7,7 +7,7 @@
   padding: 20px;
   background-color: var(--quaternary-color);
   border-radius: 5px;
-  width: 75vw;
+  width: 100%;
 }
 
 .archetype-name {
