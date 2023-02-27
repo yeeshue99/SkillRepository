@@ -1,12 +1,13 @@
 import { createClient } from '@supabase/supabase-js';
 import Papa from 'papaparse';
 import React, { useEffect, useState } from 'react';
+import { flushSync } from 'react-dom';
 import Swal from 'sweetalert2';
 import './App.css';
 import { TopologyViewerComponent } from './GraphViewer';
 import './root.css';
 import SkillTree from './SkillTree';
-const projectVersion = "0.3"
+const projectVersion = "0.3.1"
 
 // Create a single supabase client for interacting with your database
 let supabase = null
@@ -253,7 +254,7 @@ function App() {
             callCount: 10,
             delayMS: 100,
           },
-          classes: "switch purple",
+          classes: "switch",
         }
       ))))
 
@@ -345,7 +346,7 @@ function App() {
         </div>
 
         <div className='Graph'>
-          {showGraph && <TopologyViewerComponent elements={createGraphElements()} />}
+          {showGraph && <TopologyViewerComponent elements={createGraphElements()} colorScheme={colorScheme} />}
         </div>
         <br />
         {

@@ -30,160 +30,142 @@ const COLORS = {
     "#teal-700": "#00bfa5"
 };
 
-let backgroundColor = window.getComputedStyle(document.body, null).getPropertyValue('background-color');
-let textColor = window.getComputedStyle(document.body, null).getPropertyValue('color');
+function propertyFromStylesheet(selector, attribute) {
+    var value;
 
-export const style = [
-    {
-        selector: ".switch, .interface, .interface-problem",
-        style: {
-            "background-color": backgroundColor,
-            "border-width": 5,
-        }
-    },
-    {
-        selector: ".switch",
-        style: {
-            width: 240,
-            height: 160,
-            "padding": 16,
-            "border-color": COLORS["#evs-gray-light"],
-            shape: "roundrectangle",
-            "font-size": 40
-        }
-    },
-    {
-        selector: ".red",
-        style: {
-            "border-color": "#ee4326"
-        }
-    },
-    {
-        selector: ".blue",
-        style: {
-            "border-color": "#2643ee"
-        }
-    },
-    {
-        selector: ".purple",
-        style: {
-            "border-color": "#ee43ee"
-        }
-    },
-    {
-        selector: ".emerald",
-        style: {
-            "border-color": "#0eedcb"
-        }
-    },
-    {
-        selector: ".switch:selected",
-        style: {
-            "background-color": COLORS["#evs-info"]
-        }
-    },
-    {
-        selector: ".interface",
-        style: {
-            width: 54,
-            height: 54,
-            "font-size": 12,
-            "border-color": COLORS["#teal-700"]
-        }
-    },
-    {
-        selector: ".interface-problem",
-        style: {
-            width: 54,
-            height: 54,
-            "font-size": 12,
-            "border-color": COLORS["#evs-danger"]
-        }
-    },
-    {
-        selector: ".interface-problem:selected",
-        style: {
-            "background-color": COLORS["#evs-danger"]
-        }
-    },
-    {
-        selector: ".interface:selected",
-        style: {
-            "background-color": COLORS["#teal-700"]
-        }
-    },
-    {
-        selector: ":parent",
-        style: {
-            events: "yes",
-            // "background-fill": "#FFFFFF", //radial-gradient
-            "background-gradient-stop-colors": `${COLORS["#evs-gray"]} ${COLORS["#evs-gray-dark"]}`,
-            "background-opacity": 0,
-            "border-width": 0,
-            "text-valign": "top",
-            "text-halign": "left",
-            shape: "roundrectangle"
-        }
-    },
-    {
-        selector: "[label]",
-        style: {
-            label: "data(label)",
-            color: textColor,
-            "text-valign": "center",
-            "font-family": "Roboto",
-            "text-wrap": "wrap",
-            "text-max-width": 240,
-            // "text-margin-y": -100,
+    [].some.call(document.styleSheets, function (sheet) {
+        return [].some.call(sheet.rules, function (rule) {
+            if (selector === rule.selectorText) {
+                return [].some.call(rule.style, function (style) {
+                    if (attribute === style) {
+                        value = rule.style.getPropertyValue(attribute);
+                        return true;
+                    }
 
-        }
-    },
-    {
-        selector: "edge",
-        style: {
-            "z-index": 999,
-            opacity: 1,
-            "curve-style": "bezier",
-            "line-style": "dashed",
-            "line-dash-pattern": [36, 1, 2, 1].map((e) => e * 5),
-            "line-dash-offset": 0,
-            width: 15,
-            "target-arrow-shape": "triangle",
-            "target-arrow-color": (ele) => {
-                let pUsed = (ele.data("bw") / ele.data("speed")) * 100;
-                if (pUsed > 80) {
-                    return COLORS["#evs-warning"];
-                } else if (pUsed > 30) {
-                    return COLORS["#evs-success"];
-                } else if (pUsed > 0) {
-                    return COLORS["#evs-primary"];
-                } else {
-                    return COLORS["#evs-gray-light"];
+                    return false;
+                });
+            }
+
+            return false;
+        });
+    });
+
+    return value;
+}
+
+export function calculateStyle(colorScheme) {
+    let backgroundColor = propertyFromStylesheet(`.${colorScheme}`, "--primary-color");
+    let textColor = propertyFromStylesheet(`.${colorScheme}`, "--text-color");
+    let borderColor = propertyFromStylesheet(`.${colorScheme}`, "--quinary-color");
+
+    return [
+        {
+            selector: ".switch, .interface, .interface-problem",
+            style: {
+                "background-color": backgroundColor,
+                "border-width": 5,
+                "border-color": borderColor,
+            }
+        },
+        {
+            selector: ".switch",
+            style: {
+                width: 240,
+                height: 160,
+                "padding": 16,
+                // "border-color": borderColor,
+                shape: "roundrectangle",
+                "font-size": 40
+            }
+        },
+        {
+            selector: ".switch:selected",
+            style: {
+                "background-color": COLORS["#evs-info"]
+            }
+        },
+        {
+            selector: ".interface",
+            style: {
+                width: 54,
+                height: 54,
+                "font-size": 12,
+                "border-color": COLORS["#teal-700"]
+            }
+        },
+        {
+            selector: ".interface-problem",
+            style: {
+                width: 54,
+                height: 54,
+                "font-size": 12,
+                "border-color": COLORS["#evs-danger"]
+            }
+        },
+        {
+            selector: ".interface-problem:selected",
+            style: {
+                "background-color": COLORS["#evs-danger"]
+            }
+        },
+        {
+            selector: ".interface:selected",
+            style: {
+                "background-color": COLORS["#teal-700"]
+            }
+        },
+        {
+            selector: ":parent",
+            style: {
+                events: "yes",
+                // "background-fill": "#FFFFFF", //radial-gradient
+                "background-gradient-stop-colors": `${COLORS["#evs-gray"]} ${COLORS["#evs-gray-dark"]}`,
+                "background-opacity": 0,
+                "border-width": 0,
+                "text-valign": "top",
+                "text-halign": "left",
+                shape: "roundrectangle"
+            }
+        },
+        {
+            selector: "[label]",
+            style: {
+                label: "data(label)",
+                color: textColor,
+                "text-valign": "center",
+                "font-family": "Roboto",
+                "text-wrap": "wrap",
+                "text-max-width": 240,
+                // "text-margin-y": -100,
+
+            }
+        },
+        {
+            selector: "edge",
+            style: {
+                "z-index": 999,
+                opacity: 1,
+                "curve-style": "bezier",
+                "line-style": "dashed",
+                "line-dash-pattern": [36, 1, 2, 1].map((e) => e * 5),
+                "line-dash-offset": 0,
+                width: 15,
+                "target-arrow-shape": "triangle",
+                "target-arrow-color": borderColor
+            }
+        },
+        {
+            selector: "[speed]",
+            style: {
+                "line-color": (ele) => borderColor,
+                width: "mapData(speed, 0, 100, 1, 10)",
+                "z-index": (ele) => Math.ceil((ele.data("bw") / ele.data("speed")) * 100),
+                "line-dash-pattern": (ele) => {
+                    const f = 100 - Math.ceil((ele.data("bw") / ele.data("speed")) * 100);
+                    return [f, 2, 5, 2];
                 }
             }
         }
-    },
-    {
-        selector: "[speed]",
-        style: {
-            "line-color": (ele) => {
-                let pUsed = (ele.data("bw") / ele.data("speed")) * 100;
-                if (pUsed > 80) {
-                    return COLORS["#evs-warning"];
-                } else if (pUsed > 30) {
-                    return COLORS["#evs-success"];
-                } else if (pUsed > 0) {
-                    return COLORS["#evs-primary"];
-                } else {
-                    return COLORS["#evs-gray-light"];
-                }
-            },
-            width: "mapData(speed, 0, 100, 1, 10)",
-            "z-index": (ele) => Math.ceil((ele.data("bw") / ele.data("speed")) * 100),
-            "line-dash-pattern": (ele) => {
-                const f = 100 - Math.ceil((ele.data("bw") / ele.data("speed")) * 100);
-                return [f, 2, 5, 2];
-            }
-        }
-    }
-];
+    ];
+
+}

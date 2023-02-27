@@ -3,15 +3,22 @@ import cydagre from "cytoscape-dagre";
 import dagre from "dagre";
 import React, { useRef, useEffect } from "react";
 import { defaults } from "./defaults";
-import { style } from "./styles";
+import { calculateStyle } from "./styles";
 import "./root.css"
 import "./GraphViewer.css";
 
+
+cytoscape.warnings(false);
 cydagre(cytoscape, dagre);
 
-export function TopologyViewerComponent({ elements }) {
+export function TopologyViewerComponent({ elements, colorScheme }) {
     const ref = useRef(null);
     useEffect(() => {
+
+        console.log("Rendering graph...", colorScheme)
+
+        let style = calculateStyle(colorScheme)
+
         const cy = cytoscape({
             container: ref.current,
             boxSelectionEnabled: false,
@@ -24,7 +31,7 @@ export function TopologyViewerComponent({ elements }) {
             pan: { x: 0, y: 0 },
             minZoom: 0.1,
             maxZoom: 5,
-            // wheelSensitivity: 0.1,
+            wheelSensitivity: 0.1,
             motionBlur: false,
             motionBlurOpacity: 0.5,
             pixelRatio: "auto",
@@ -32,6 +39,8 @@ export function TopologyViewerComponent({ elements }) {
             style,
             elements
         });
+
+        // cy.json({ style: style });
 
         cy.on("tap", function (e) {
             const url = e.target.data("url");
@@ -58,7 +67,7 @@ export function TopologyViewerComponent({ elements }) {
                 cy.destroy();
             }
         };
-    });
+    }, [colorScheme, elements]);
     return <div className="topology-viewer-component" ref={ref}></div>;
 };
 

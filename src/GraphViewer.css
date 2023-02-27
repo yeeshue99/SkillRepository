@@ -10,12 +10,5 @@
     flex-grow: 1;
     align-items: stretch;
     height: 900px;
-    background: var(--secondary-color);
-}
-
-.switch,
-.interface,
-.interface-problem {
-    background-color: var(--primary-color);
-    border-width: 5;
+    background: var(--tertiary-color);
 }
