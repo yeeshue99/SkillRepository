@@ -1,16 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import SkillTree from './SkillTree';
+import { createClient } from '@supabase/supabase-js';
 import Papa from 'papaparse';
-import { createClient } from '@supabase/supabase-js'
-import Swal from 'sweetalert2'
-import './root.css';
+import React, { useEffect, useState } from 'react';
+import Swal from 'sweetalert2';
 import './App.css';
-import cytoscape from 'cytoscape';
-import dagre from 'cytoscape-dagre';
-
-cytoscape.use(dagre);
-
-const projectVersion = "0.2.4"
+import { TopologyViewerComponent } from './GraphViewer';
+import './root.css';
+import SkillTree from './SkillTree';
+const projectVersion = "0.3"
 
 // Create a single supabase client for interacting with your database
 let supabase = null
@@ -72,8 +68,7 @@ function App() {
       localStorage.setItem("version", JSON.stringify(projectVersion))
       Swal.fire({
         title: `Version: ${projectVersion}`,
-        // html: 'New in this version:<br>Graph view:<br>You can now view your skill tree as an actual tree! This should help with visualization of dependencies, as well as what you have available to you.',
-        html: 'New in this version:<br>Mobile Fix:<br>Fixed css issues for mobile.<br>Transition View:<br>Added functionality for an easier transition when viewing skills.',
+        html: 'New in this version:<br>Graph view:<br>You can now view your skill tree as an actual tree! This should help with visualization of dependencies, as well as what you have available to you.',
         width: "75%"
       })
     }
@@ -246,6 +241,62 @@ function App() {
     setChecked(!checked);
   };
 
+  const createGraphElements = () => {
+    let base = [{ data: { id: "siteB" } }]
+    let nodes = Object.entries(skillGroups).filter((item) => item[0] === selectedArchetype).map(([, skills]) => (
+      skills.map((skill) => (
+        {
+          data: {
+            id: skill.name,
+            label: skill.name,
+            parent: "siteB",
+            callCount: 10,
+            delayMS: 100,
+          },
+          classes: "switch purple",
+        }
+      ))))
+
+    let edges = Object.entries(skillGroups).filter((item) => item[0] === selectedArchetype).map(([, skills]) => (
+      skills.filter((skill) => skill.prerequisite !== "None").map((skill) => {
+        if (skill.prerequisite.includes(",")) {
+          let prereqs = skill.prerequisite.split(", ");
+          return prereqs.map((prereq) => {
+            return {
+              data: {
+                // id: skill.name + prereq,
+                source: prereq,
+                target: skill.name,
+                callCount: 10,
+                delayMS: 100,
+                speed: 100,
+                bw: 50
+              },
+            }
+          })
+        }
+        else {
+          return {
+            data: {
+              // id: skill.name + skill.prerequisite,
+              source: skill.prerequisite,
+              target: skill.name,
+              callCount: 10,
+              delayMS: 100,
+              speed: 100,
+              bw: 50
+            },
+          }
+        }
+      })))
+
+    nodes = [base[0], ...nodes[0]];
+
+    edges = edges.flat().flat();
+
+    return { nodes: nodes, edges: edges }
+  }
+
   return (
     <div>
       {<div className='app'>
@@ -289,10 +340,12 @@ function App() {
 
           <div className='nav-buttons__set'>
             {process.env.NODE_ENV !== 'production' && <button className="clickable alternate-button" onClick={downloadCSV}>Download Skill CSV</button>}
-            {/* <button className="clickable alternate-button" onClick={toggleGraph}>Show graph for this archetype</button> */}
+            <button className="clickable alternate-button" onClick={toggleGraph}>Show graph for this archetype</button>
           </div>
+        </div>
 
-
+        <div className='Graph'>
+          {showGraph && <TopologyViewerComponent elements={createGraphElements()} />}
         </div>
         <br />
         {

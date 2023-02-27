@@ -1,0 +1,21 @@
+.Graph {
+    font-family: sans-serif;
+    display: flex;
+    flex-direction: column;
+}
+
+.topology-viewer-component {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    align-items: stretch;
+    height: 900px;
+    background: var(--secondary-color);
+}
+
+.switch,
+.interface,
+.interface-problem {
+    background-color: var(--primary-color);
+    border-width: 5;
+}
