@@ -250,7 +250,6 @@ function App() {
           data: {
             id: skill.name,
             label: skill.name,
-            parent: "siteB",
             callCount: 10,
             delayMS: 100,
           },

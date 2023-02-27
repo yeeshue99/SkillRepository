@@ -1,6 +1,5 @@
 import cytoscape from "cytoscape";
-import cydagre from "cytoscape-dagre";
-import dagre from "dagre";
+import dagre from "cytoscape-dagre";
 import React, { useRef, useEffect } from "react";
 import { defaults } from "./defaults";
 import { calculateStyle } from "./styles";
@@ -9,7 +8,8 @@ import "./GraphViewer.css";
 
 
 cytoscape.warnings(false);
-cydagre(cytoscape, dagre);
+cytoscape.use(dagre);
+// cydagre(cytoscape, dagre);
 
 export function TopologyViewerComponent({ elements, colorScheme }) {
     const ref = useRef(null);
