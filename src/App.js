@@ -1,7 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 import Papa from 'papaparse';
 import React, { useEffect, useState } from 'react';
-import { flushSync } from 'react-dom';
 import Swal from 'sweetalert2';
 import './App.css';
 import { TopologyViewerComponent } from './GraphViewer';
