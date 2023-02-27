@@ -243,7 +243,6 @@ function App() {
   };
 
   const createGraphElements = () => {
-    let base = [{ data: { id: "siteB" } }]
     let nodes = Object.entries(skillGroups).filter((item) => item[0] === selectedArchetype).map(([, skills]) => (
       skills.map((skill) => (
         {
@@ -290,7 +289,7 @@ function App() {
         }
       })))
 
-    nodes = [base[0], ...nodes[0]];
+    nodes = [...nodes[0]];
 
     edges = edges.flat().flat();
 
