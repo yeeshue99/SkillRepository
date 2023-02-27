@@ -13,6 +13,7 @@ let supabase = null
 
 if (process.env.NODE_ENV === 'production') {
   supabase = createClient(process.env.REACT_APP_DATABASE_URL, process.env.REACT_APP_DATABASE_API_KEY)
+  // supabase = createClient(process.env.REACT_APP_DATABASE_URL, process.env.REACT_APP_DATABASE_API_KEY)
 }
 
 const installedColorSchemes = ["melon", "dark-mode", "earth-tones", "bubblegum", "honey", "mint", "the-bay"]
@@ -205,7 +206,7 @@ function App() {
   };
 
   function downloadCSV() {
-    if (process.env.NODE_ENV === 'production') {
+    if (process.env.NODE_ENV !== 'production') {
       (async () => {
         return getSkills();
       })().then((data) => {
