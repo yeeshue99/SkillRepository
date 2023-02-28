@@ -6,7 +6,7 @@ import './App.css';
 import { TopologyViewerComponent } from './GraphViewer';
 import './root.css';
 import SkillTree from './SkillTree';
-const projectVersion = "0.3.3"
+const projectVersion = "0.3.4"
 
 // Create a single supabase client for interacting with your database
 let supabase = null
@@ -46,6 +46,7 @@ function App() {
     return initialValue || "melon";
   });
   const [showGraph, setShowGraph] = useState(false);
+  const [resetViewer, setResetViewer] = useState(false);
 
   useEffect(() => {
     function assignColorScheme() {
@@ -286,11 +287,12 @@ function App() {
           <div className='nav-buttons__set'>
             {process.env.NODE_ENV !== 'production' && <button className="clickable alternate-button" onClick={downloadCSV}>Download Skill CSV</button>}
             <button className="clickable alternate-button" onClick={toggleGraph}>Show graph for this archetype</button>
+            <button className='clickable alternate-button' onClick={() => setResetViewer(true)}>Reset graph viewer</button>
           </div>
         </div>
 
         <div className='Graph'>
-          {showGraph && <TopologyViewerComponent skillGroups={skillGroups} selectedArchetype={selectedArchetype} colorScheme={colorScheme} showGraph={showGraph} />}
+          {showGraph && <TopologyViewerComponent skillGroups={skillGroups} selectedArchetype={selectedArchetype} colorScheme={colorScheme} showGraph={showGraph} resetViewer={resetViewer} setResetViewer={setResetViewer} />}
         </div>
         <br />
         {

@@ -1,6 +1,6 @@
 {
   "name": "skill-tree",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "private": true,
   "dependencies": {
     "@supabase/supabase-js": "^2.2.3",

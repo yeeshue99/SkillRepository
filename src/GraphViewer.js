@@ -1,6 +1,7 @@
 import cytoscape from "cytoscape";
 import dagre from "cytoscape-dagre";
 import React, { useRef, useEffect, useState } from "react";
+import { flushSync } from "react-dom";
 import { defaults } from "./defaults";
 import { calculateStyle } from "./styles";
 import tippy from 'tippy.js';
@@ -70,7 +71,7 @@ const createGraphElements = (skillGroups, selectedArchetype) => {
 
 
 
-export function TopologyViewerComponent({ skillGroups, selectedArchetype, colorScheme, showGraph }) {
+export function TopologyViewerComponent({ skillGroups, selectedArchetype, colorScheme, showGraph, resetViewer, setResetViewer }) {
     const ref = useRef(null);
     const [graphData, setGraphData] = useState(() => {
         const saved = localStorage.getItem("graphData");
@@ -82,8 +83,18 @@ export function TopologyViewerComponent({ skillGroups, selectedArchetype, colorS
 
     useEffect(() => {
         const elements = createGraphElements(skillGroups, selectedArchetype);
+        let tip;
 
         let style = calculateStyle(colorScheme)
+
+        if (resetViewer) {
+            localStorage.removeItem("graphData");
+            setGraphData({});
+            setFirstRender(true);
+            setResetViewer(false);
+            setSelected(null);
+            return;
+        }
 
         const cy = cytoscape({
             container: ref.current,
@@ -148,7 +159,6 @@ export function TopologyViewerComponent({ skillGroups, selectedArchetype, colorS
             localStorage.setItem("graphData", JSON.stringify(graphObject));
         }
 
-        let tip;
 
         if (selected) {
             let nodeRef = selected.popperRef();
@@ -218,7 +228,7 @@ export function TopologyViewerComponent({ skillGroups, selectedArchetype, colorS
                 cy.destroy();
             }
         };
-    }, [selectedArchetype, skillGroups, colorScheme, graphData, selected, firstRender, showGraph]);
+    }, [selectedArchetype, skillGroups, colorScheme, graphData, selected, firstRender, showGraph, resetViewer, setResetViewer]);
     return <div className="topology-viewer-component" ref={ref}></div>;
 };
 
