@@ -69,7 +69,7 @@ function App() {
       localStorage.setItem("version", JSON.stringify(projectVersion))
       Swal.fire({
         title: `Version: ${projectVersion}`,
-        html: 'New in this version:<br>Graph view:<br>You can now view your skill tree as an actual tree! This should help with visualization of dependencies, as well as what you have available to you.',
+        html: 'New in this version:<br>Graph view:<br>You can now view your skill tree as an actual tree! This should help with visualization of dependencies, as well as what you have available to you.<br>Graph view can now save your graph layout! So if you move nodes, it\'ll save your layout between sessions.<br>',
         width: "75%"
       })
     }

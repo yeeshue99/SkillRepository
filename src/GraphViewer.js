@@ -102,9 +102,28 @@ export function TopologyViewerComponent({ skillGroups, selectedArchetype, colorS
         });
 
         if (graphData.hasOwnProperty(selectedArchetype)) {
-            console.log(graphData[selectedArchetype])
-            cy.elements().remove();
-            cy.add(graphData[selectedArchetype]).layout({ name: 'preset' }).run();
+            let generatedNodes = cy.nodes();
+            let savedNodes = graphData[selectedArchetype].nodes;
+
+            let generatedEdges = cy.edges();
+            let savedEdges = graphData[selectedArchetype].edges;
+
+            generatedNodes.forEach((generatedNode) => {
+                let savedNode = savedNodes.find((savedNode) => savedNode.data.id === generatedNode.data().id);
+                if (savedNode) {
+                    generatedNode.position(savedNode.position);
+                }
+            });
+
+            generatedEdges.forEach((generatedEdge) => {
+                let savedEdge = savedEdges.find((savedEdge) => savedEdge.data.id === generatedEdge.data().id);
+                if (savedEdge) {
+                    generatedEdge.position(savedEdge.position);
+                }
+            });
+
+            // cy.elements().remove();
+            // cy.add(graphData[selectedArchetype]).layout({ name: 'preset' }).run();
         }
 
         // cy.json({ style: style });
