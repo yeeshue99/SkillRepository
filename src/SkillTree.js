@@ -50,7 +50,7 @@ function SkillTree({ data, selectedArchetype, checked }) {
                     <div className="archetype-name">{archetype}</div>
                     <div>
                         {skills.map((skill) => (
-                            <SkillCard skill={skill} checked={checked} />
+                            <SkillCard skill={skill} checked={checked} key={skill.name} />
                         ))}
                     </div>
                 </div>

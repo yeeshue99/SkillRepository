@@ -3,12 +3,16 @@ import dagre from "cytoscape-dagre";
 import React, { useRef, useEffect, useState } from "react";
 import { defaults } from "./defaults";
 import { calculateStyle } from "./styles";
+import tippy from 'tippy.js';
+import 'tippy.js/dist/tippy.css';
+import popper from 'cytoscape-popper';
 import "./root.css"
 import "./GraphViewer.css";
 
 
 cytoscape.warnings(false);
 cytoscape.use(dagre);
+cytoscape.use(popper);
 
 const createGraphElements = (skillGroups, selectedArchetype) => {
     let nodes = Object.entries(skillGroups).filter((item) => item[0] === selectedArchetype).map(([, skills]) => (
@@ -64,19 +68,20 @@ const createGraphElements = (skillGroups, selectedArchetype) => {
     return { nodes: nodes, edges: edges }
 }
 
-export function TopologyViewerComponent({ skillGroups, selectedArchetype, colorScheme }) {
+
+
+export function TopologyViewerComponent({ skillGroups, selectedArchetype, colorScheme, showGraph }) {
     const ref = useRef(null);
     const [graphData, setGraphData] = useState(() => {
         const saved = localStorage.getItem("graphData");
         const initialValue = JSON.parse(saved);
         return initialValue || {};
     });
+    const [selected, setSelected] = useState(null);
+    const [firstRender, setFirstRender] = useState(true);
 
     useEffect(() => {
-
         const elements = createGraphElements(skillGroups, selectedArchetype);
-
-        console.log("Rendering graph...", colorScheme)
 
         let style = calculateStyle(colorScheme)
 
@@ -98,10 +103,11 @@ export function TopologyViewerComponent({ skillGroups, selectedArchetype, colorS
             pixelRatio: "auto",
             textureOnViewport: false,
             style,
-            elements
+            elements,
         });
 
         if (graphData.hasOwnProperty(selectedArchetype)) {
+
             let generatedNodes = cy.nodes();
             let savedNodes = graphData[selectedArchetype].nodes;
 
@@ -109,36 +115,87 @@ export function TopologyViewerComponent({ skillGroups, selectedArchetype, colorS
             let savedEdges = graphData[selectedArchetype].edges;
 
             generatedNodes.forEach((generatedNode) => {
-                let savedNode = savedNodes.find((savedNode) => savedNode.data.id === generatedNode.data().id);
+                let savedNode = savedNodes?.find((savedNode) => savedNode.data.id === generatedNode.data().id);
                 if (savedNode) {
                     generatedNode.position(savedNode.position);
                 }
             });
 
             generatedEdges.forEach((generatedEdge) => {
-                let savedEdge = savedEdges.find((savedEdge) => savedEdge.data.id === generatedEdge.data().id);
+                let savedEdge = savedEdges?.find((savedEdge) => savedEdge.data.id === generatedEdge.data().id);
                 if (savedEdge) {
                     generatedEdge.position(savedEdge.position);
                 }
             });
 
-            // cy.elements().remove();
-            // cy.add(graphData[selectedArchetype]).layout({ name: 'preset' }).run();
+            cy.zoom(graphData[selectedArchetype].viewport.zoom);
+            cy.pan(graphData[selectedArchetype].viewport.pan);
         }
 
-        // cy.json({ style: style });
+        if (firstRender) {
+            cy.fit([], 50);
+            let graphObject = {
+                ...graphData,
+                [selectedArchetype]: {
+                    ...graphData[selectedArchetype],
+                    "viewport": {
+                        "zoom": cy.zoom(),
+                        "pan": cy.pan()
+                    }
+                }
+            }
+            setGraphData(graphObject);
+            localStorage.setItem("graphData", JSON.stringify(graphObject));
+        }
 
-        // cy.on("tap", function (e) {
-        //     const url = e.target.data("url");
-        //     if (url && url !== "") {
-        //         window.open(url);
-        //     }
-        // });
+        let tip;
+
+        if (selected) {
+            let nodeRef = selected.popperRef();
+            let dummyDomEle = document.createElement('div');
+
+            let skillRef = skillGroups[selectedArchetype].find((skill) => skill.name === selected.id());
+
+            if (skillRef) {
+                tip = new tippy(dummyDomEle, {
+                    getReferenceClientRect: nodeRef.getBoundingClientRect,
+                    trigger: 'manual',
+
+                    content: () => {
+                        let content = document.createElement('div');
+
+                        content.innerHTML = skillRef?.description;
+
+                        return content;
+                    }
+                });
+
+                tip.show();
+            }
+            else {
+                tip?.hide();
+            }
+        }
+
+        cy.on('tap', 'node', function (evt) {
+            setSelected(this)
+        });
 
         cy.on('free', 'node', function (evt) {
-            setGraphData({ ...graphData, [selectedArchetype]: { nodes: cy.nodes().jsons(), edges: cy.edges().jsons() } });
-            localStorage.setItem("graphData", JSON.stringify({ ...graphData, [selectedArchetype]: { nodes: cy.nodes().jsons(), edges: cy.edges().jsons() } }));
-
+            let graphObject = {
+                ...graphData,
+                [selectedArchetype]: {
+                    nodes: cy.nodes().jsons(),
+                    edges: cy.edges().jsons(),
+                    "viewport": {
+                        "zoom": cy.zoom(),
+                        "pan": cy.pan()
+                    }
+                }
+            }
+            setGraphData(graphObject);
+            localStorage.setItem("graphData", JSON.stringify(graphObject));
+            setSelected(this);
         });
 
         const animateEdges = () => {
@@ -154,12 +211,14 @@ export function TopologyViewerComponent({ skillGroups, selectedArchetype, colorS
 
         animateEdges();
 
+        setFirstRender(false);
+
         return function cleanup() {
             if (cy) {
                 cy.destroy();
             }
         };
-    }, [selectedArchetype, skillGroups, colorScheme, graphData]);
+    }, [selectedArchetype, skillGroups, colorScheme, graphData, selected, firstRender, showGraph]);
     return <div className="topology-viewer-component" ref={ref}></div>;
 };
 

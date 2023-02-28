@@ -6,7 +6,7 @@ import './App.css';
 import { TopologyViewerComponent } from './GraphViewer';
 import './root.css';
 import SkillTree from './SkillTree';
-const projectVersion = "0.3.2"
+const projectVersion = "0.3.3"
 
 // Create a single supabase client for interacting with your database
 let supabase = null
@@ -69,7 +69,7 @@ function App() {
       localStorage.setItem("version", JSON.stringify(projectVersion))
       Swal.fire({
         title: `Version: ${projectVersion}`,
-        html: 'New in this version:<br>Graph view:<br>You can now view your skill tree as an actual tree! This should help with visualization of dependencies, as well as what you have available to you.<br>Graph view can now save your graph layout! So if you move nodes, it\'ll save your layout between sessions.<br>',
+        html: 'New in this version:<br>Graph view:<br>You can now view your skill tree as an actual tree! This should help with visualization of dependencies, as well as what you have available to you.<br>Graph view can now save your graph layout! So if you move nodes, it\'ll save your layout between sessions.<br>Graph View can now also click on skills in order to show a quick popup of the skill description.<br>',
         width: "75%"
       })
     }
@@ -290,7 +290,7 @@ function App() {
         </div>
 
         <div className='Graph'>
-          {showGraph && <TopologyViewerComponent skillGroups={skillGroups} selectedArchetype={selectedArchetype} colorScheme={colorScheme} />}
+          {showGraph && <TopologyViewerComponent skillGroups={skillGroups} selectedArchetype={selectedArchetype} colorScheme={colorScheme} showGraph={showGraph} />}
         </div>
         <br />
         {
