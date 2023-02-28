@@ -1,7 +1,6 @@
 import cytoscape from "cytoscape";
 import dagre from "cytoscape-dagre";
 import React, { useRef, useEffect, useState } from "react";
-import { flushSync } from "react-dom";
 import { defaults } from "./defaults";
 import { calculateStyle } from "./styles";
 import tippy from 'tippy.js';
