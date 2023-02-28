@@ -6,7 +6,7 @@ import './App.css';
 import { TopologyViewerComponent } from './GraphViewer';
 import './root.css';
 import SkillTree from './SkillTree';
-const projectVersion = "0.3.1"
+const projectVersion = "0.3.2"
 
 // Create a single supabase client for interacting with your database
 let supabase = null
@@ -242,60 +242,6 @@ function App() {
     setChecked(!checked);
   };
 
-  const createGraphElements = () => {
-    let nodes = Object.entries(skillGroups).filter((item) => item[0] === selectedArchetype).map(([, skills]) => (
-      skills.map((skill) => (
-        {
-          data: {
-            id: skill.name,
-            label: skill.name,
-            callCount: 10,
-            delayMS: 100,
-          },
-          classes: "switch",
-        }
-      ))))
-
-    let edges = Object.entries(skillGroups).filter((item) => item[0] === selectedArchetype).map(([, skills]) => (
-      skills.filter((skill) => skill.prerequisite !== "None").map((skill) => {
-        if (skill.prerequisite.includes(",")) {
-          let prereqs = skill.prerequisite.split(", ");
-          return prereqs.map((prereq) => {
-            return {
-              data: {
-                // id: skill.name + prereq,
-                source: prereq,
-                target: skill.name,
-                callCount: 10,
-                delayMS: 100,
-                speed: 100,
-                bw: 50
-              },
-            }
-          })
-        }
-        else {
-          return {
-            data: {
-              // id: skill.name + skill.prerequisite,
-              source: skill.prerequisite,
-              target: skill.name,
-              callCount: 10,
-              delayMS: 100,
-              speed: 100,
-              bw: 50
-            },
-          }
-        }
-      })))
-
-    nodes = [...nodes[0]];
-
-    edges = edges.flat().flat();
-
-    return { nodes: nodes, edges: edges }
-  }
-
   return (
     <div>
       {<div className='app'>
@@ -344,7 +290,7 @@ function App() {
         </div>
 
         <div className='Graph'>
-          {showGraph && <TopologyViewerComponent elements={createGraphElements()} colorScheme={colorScheme} />}
+          {showGraph && <TopologyViewerComponent skillGroups={skillGroups} selectedArchetype={selectedArchetype} colorScheme={colorScheme} />}
         </div>
         <br />
         {

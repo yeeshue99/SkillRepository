@@ -60,7 +60,7 @@ export function calculateStyle(colorScheme) {
 
     return [
         {
-            selector: ".switch, .interface, .interface-problem",
+            selector: ".node, .interface, .interface-problem",
             style: {
                 "background-color": backgroundColor,
                 "border-width": 5,
@@ -68,18 +68,17 @@ export function calculateStyle(colorScheme) {
             }
         },
         {
-            selector: ".switch",
+            selector: ".node",
             style: {
                 width: 240,
                 height: 160,
                 "padding": 16,
-                // "border-color": borderColor,
                 shape: "roundrectangle",
                 "font-size": 40
             }
         },
         {
-            selector: ".switch:selected",
+            selector: ".node:selected",
             style: {
                 "background-color": COLORS["#evs-info"]
             }
