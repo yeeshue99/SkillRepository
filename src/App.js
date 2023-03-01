@@ -286,7 +286,7 @@ function App() {
 
           <div className='nav-buttons__set'>
             {process.env.NODE_ENV !== 'production' && <button className="clickable alternate-button" onClick={downloadCSV}>Download Skill CSV</button>}
-            <button className="clickable alternate-button" onClick={toggleGraph}>Show graph for this archetype</button>
+            <button className="clickable alternate-button" onClick={toggleGraph}>Toggle graph</button>
             <button className='clickable alternate-button' onClick={() => setResetViewer(true)}>Reset graph viewer</button>
           </div>
         </div>
