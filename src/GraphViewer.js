@@ -211,13 +211,13 @@ export function TopologyViewerComponent({ skillGroups, selectedArchetype, colorS
             saveGraphData();
         });
 
-        cy.on('zoom', function (evt) {
-            saveGraphData();
-        });
+        // cy.on('zoom', function (evt) {
+        //     saveGraphData();
+        // });
 
-        cy.on('pan', function (evt) {
-            saveGraphData();
-        });
+        // cy.on('pan', function (evt) {
+        //     saveGraphData();
+        // });
 
         const animateEdges = () => {
             cy.edges().style({ "line-dash-offset": 0 });
