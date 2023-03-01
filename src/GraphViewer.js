@@ -211,11 +211,11 @@ export function TopologyViewerComponent({ skillGroups, selectedArchetype, colorS
             saveGraphData();
         });
 
-        cy.on('zoom', 'node', function (evt) {
+        cy.on('zoom', function (evt) {
             saveGraphData();
         });
 
-        cy.on('pan', 'node', function (evt) {
+        cy.on('pan', function (evt) {
             saveGraphData();
         });
 
