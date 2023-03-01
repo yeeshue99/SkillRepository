@@ -190,7 +190,7 @@ export function TopologyViewerComponent({ skillGroups, selectedArchetype, colorS
             setSelected(this)
         });
 
-        cy.on('free', 'node', function (evt) {
+        const saveGraphData = () => {
             let graphObject = {
                 ...graphData,
                 [selectedArchetype]: {
@@ -205,6 +205,18 @@ export function TopologyViewerComponent({ skillGroups, selectedArchetype, colorS
             setGraphData(graphObject);
             localStorage.setItem("graphData", JSON.stringify(graphObject));
             setSelected(this);
+        }
+
+        cy.on('free', 'node', function (evt) {
+            saveGraphData();
+        });
+
+        cy.on('zoom', 'node', function (evt) {
+            saveGraphData();
+        });
+
+        cy.on('pan', 'node', function (evt) {
+            saveGraphData();
         });
 
         const animateEdges = () => {
