@@ -138,18 +138,6 @@ export function TopologyViewerComponent({ skillGroups, selectedArchetype, colorS
             });
         }
 
-        if (firstRender) {
-            cy.fit([], 50);
-            let graphObject = {
-                ...graphData,
-                [selectedArchetype]: {
-                    ...graphData[selectedArchetype],
-                }
-            }
-            setGraphData(graphObject);
-            localStorage.setItem("graphData", JSON.stringify(graphObject));
-        }
-
         const saveGraphData = () => {
             let graphObject = {
                 ...graphData,
@@ -160,11 +148,17 @@ export function TopologyViewerComponent({ skillGroups, selectedArchetype, colorS
             }
             let isEqual = true;
 
-            //Check nodes
-            for (var nodeIndex = 0; nodeIndex < graphObject[selectedArchetype].nodes.length; nodeIndex++) {
-                if (graphObject[selectedArchetype].nodes[nodeIndex].position.x !== graphData[selectedArchetype].nodes[nodeIndex].position.x) {
-                    isEqual = false;
-                    break;
+            if (Object.keys(graphObject).length !== Object.keys(graphData).length) {
+                isEqual = false;
+            }
+
+            if (isEqual) {
+                //Check nodes
+                for (var nodeIndex = 0; nodeIndex < graphObject[selectedArchetype].nodes.length; nodeIndex++) {
+                    if (graphObject[selectedArchetype].nodes[nodeIndex].position.x !== graphData[selectedArchetype].nodes[nodeIndex].position.x) {
+                        isEqual = false;
+                        break;
+                    }
                 }
             }
 
@@ -185,9 +179,7 @@ export function TopologyViewerComponent({ skillGroups, selectedArchetype, colorS
         cy.off('tap');
 
         cy.on('tap', 'node', function (evt) {
-            // console.log(evt);
             setSelected(this);
-            // console.log(selected);
         });
 
         if (selected) {
@@ -213,6 +205,7 @@ export function TopologyViewerComponent({ skillGroups, selectedArchetype, colorS
                 tip.show();
             }
             else {
+                setSelected(null);
                 tip?.hide();
             }
         }
