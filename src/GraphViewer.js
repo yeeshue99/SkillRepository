@@ -9,7 +9,6 @@ import popper from 'cytoscape-popper';
 import "./root.css"
 import "./GraphViewer.css";
 
-
 cytoscape.warnings(false);
 cytoscape.use(dagre);
 cytoscape.use(popper);
@@ -137,9 +136,6 @@ export function TopologyViewerComponent({ skillGroups, selectedArchetype, colorS
                     generatedEdge.position(savedEdge.position);
                 }
             });
-
-            cy.zoom(graphData[selectedArchetype].viewport.zoom);
-            cy.pan(graphData[selectedArchetype].viewport.pan);
         }
 
         if (firstRender) {
@@ -148,16 +144,51 @@ export function TopologyViewerComponent({ skillGroups, selectedArchetype, colorS
                 ...graphData,
                 [selectedArchetype]: {
                     ...graphData[selectedArchetype],
-                    "viewport": {
-                        "zoom": cy.zoom(),
-                        "pan": cy.pan()
-                    }
                 }
             }
             setGraphData(graphObject);
             localStorage.setItem("graphData", JSON.stringify(graphObject));
         }
 
+        const saveGraphData = () => {
+            let graphObject = {
+                ...graphData,
+                [selectedArchetype]: {
+                    nodes: cy.nodes().jsons(),
+                    edges: cy.edges().jsons(),
+                }
+            }
+            let isEqual = true;
+
+            //Check nodes
+            for (var nodeIndex = 0; nodeIndex < graphObject[selectedArchetype].nodes.length; nodeIndex++) {
+                if (graphObject[selectedArchetype].nodes[nodeIndex].position.x !== graphData[selectedArchetype].nodes[nodeIndex].position.x) {
+                    isEqual = false;
+                    break;
+                }
+            }
+
+            setGraphData(graphObject);
+            localStorage.setItem("graphData", JSON.stringify(graphObject));
+
+            if (isEqual) return;
+
+            setSelected(null);
+        }
+
+        cy.off('free');
+
+        cy.on('free', 'node', function (evt) {
+            saveGraphData();
+        });
+
+        cy.off('tap');
+
+        cy.on('tap', 'node', function (evt) {
+            // console.log(evt);
+            setSelected(this);
+            // console.log(selected);
+        });
 
         if (selected) {
             let nodeRef = selected.popperRef();
@@ -185,39 +216,6 @@ export function TopologyViewerComponent({ skillGroups, selectedArchetype, colorS
                 tip?.hide();
             }
         }
-
-        cy.on('tap', 'node', function (evt) {
-            setSelected(this)
-        });
-
-        const saveGraphData = () => {
-            let graphObject = {
-                ...graphData,
-                [selectedArchetype]: {
-                    nodes: cy.nodes().jsons(),
-                    edges: cy.edges().jsons(),
-                    "viewport": {
-                        "zoom": cy.zoom(),
-                        "pan": cy.pan()
-                    }
-                }
-            }
-            setGraphData(graphObject);
-            localStorage.setItem("graphData", JSON.stringify(graphObject));
-            setSelected(this);
-        }
-
-        cy.on('free', 'node', function (evt) {
-            saveGraphData();
-        });
-
-        // cy.on('zoom', function (evt) {
-        //     saveGraphData();
-        // });
-
-        // cy.on('pan', function (evt) {
-        //     saveGraphData();
-        // });
 
         const animateEdges = () => {
             cy.edges().style({ "line-dash-offset": 0 });
