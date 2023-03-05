@@ -88,3 +88,21 @@ body {
     --quinary-color: #725752;
     --text-color: #000;
 }
+
+.lemon-drop {
+    --primary-color: #b2f8f2;
+    --secondary-color: #fffc99;
+    --tertiary-color: #BCD39C;
+    --quaternary-color: #eafdcf;
+    --quinary-color: #8e8358;
+    --text-color: #000;
+}
+
+.the-ocean {
+    --primary-color: #134074;
+    --secondary-color: #8DA9C4;
+    --tertiary-color: #13315C;
+    --quaternary-color: #0B2545;
+    --quinary-color: #8e8358;
+    --text-color: #fff;
+}
