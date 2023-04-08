@@ -7,7 +7,7 @@ function SkillTree({ data, selectedArchetype, checked }) {
     const [activeCard, setActiveCard] = useState(null);
 
     const handleCardClick = (name) => {
-        setActiveCard(prev => prev === name ? null : name);
+        setActiveCard(name);
         console.log(name)
     };
 
