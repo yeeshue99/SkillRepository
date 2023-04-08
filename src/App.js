@@ -11,7 +11,7 @@ const projectVersion = "0.3.7"
 // Create a single supabase client for interacting with your database
 let supabase = null
 
-if (process.env.NODE_ENV !== 'production') {
+if (process.env.NODE_ENV === 'production') {
   supabase = createClient(process.env.REACT_APP_DATABASE_URL, process.env.REACT_APP_DATABASE_API_KEY)
 }
 
