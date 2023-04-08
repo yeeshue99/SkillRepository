@@ -34,7 +34,14 @@
 .skill-card:hover {
   background-color: var(--primary-color);
   cursor: pointer;
-  height: 200px;
+  height: 250px;
+  overflow: auto;
+}
+
+.skill-card__activated {
+  background-color: var(--primary-color);
+  cursor: pointer;
+  height: 250px;
   overflow: auto;
 }
 
