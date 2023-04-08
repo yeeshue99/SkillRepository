@@ -4,7 +4,7 @@ export const defaults = {
     edgeSep: undefined, // the separation between adjacent edges in the same rank
     rankSep: 300, // the separation between each rank in the layout
     rankDir: "TB", // 'TB' for top to bottom flow, 'LR' for left to right,
-    ranker: "network-simplex", // Type of algorithm to assign a rank to each node in the input graph. Possible values: 'network-simplex', 'tight-tree' or 'longest-path'
+    ranker: "tight-tree", // Type of algorithm to assign a rank to each node in the input graph. Possible values: 'network-simplex', 'tight-tree' or 'longest-path'
     //'network-simplex', 'tight-tree' or 'longest-path'
     minLen: function (edge) {
         return 1;

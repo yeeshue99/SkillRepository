@@ -6,14 +6,13 @@ import './App.css';
 import { TopologyViewerComponent } from './GraphViewer';
 import './root.css';
 import SkillTree from './SkillTree';
-const projectVersion = "0.3.6"
+const projectVersion = "0.3.7"
 
 // Create a single supabase client for interacting with your database
 let supabase = null
 
-if (process.env.NODE_ENV === 'production') {
+if (process.env.NODE_ENV !== 'production') {
   supabase = createClient(process.env.REACT_APP_DATABASE_URL, process.env.REACT_APP_DATABASE_API_KEY)
-  // supabase = createClient(process.env.REACT_APP_DATABASE_URL, process.env.REACT_APP_DATABASE_API_KEY)
 }
 
 const installedColorSchemes = ["melon", "dark-mode", "earth-tones", "bubblegum", "honey", "mint", "the-bay", "lemon-drop", "the-ocean"]
@@ -70,7 +69,7 @@ function App() {
       localStorage.setItem("version", JSON.stringify(projectVersion))
       Swal.fire({
         title: `Version: ${projectVersion}`,
-        html: 'New in this version:<br>Graph view:<br>You can now view your skill tree as an actual tree! This should help with visualization of dependencies, as well as what you have available to you.<br>Graph view can now save your graph layout! So if you move nodes, it\'ll save your layout between sessions.<br>Graph View can now also click on skills in order to show a quick popup of the skill description.<br>',
+        html: 'New in this version:<br>Graph view:<br>You can now view your skill tree as an actual tree! This should help with visualization of dependencies, as well as what you have available to you.<br>Graph view can now save your graph layout! So if you move nodes, it\'ll save your layout between sessions.<br>Graph View can now also click on skills in order to show a quick popup of the skill description.<br> <br>Skill List:<br> You can also now click on skill cards in the list to keep them open. You can have only one open at once, but this should make it easier to get more detailed information on skills.',
         width: "75%"
       })
     }
@@ -278,10 +277,6 @@ function App() {
               Show all descriptions
             </label>
 
-            {/* <button className="clickable" onClick={() => {
-            localStorage.setItem("learnedSkills", JSON.stringify([]));
-            forceUpdate();
-          }}>Show hidden skills</button> */}
           </div>
 
           <div className='nav-buttons__set'>
