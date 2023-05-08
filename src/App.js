@@ -6,7 +6,7 @@ import './App.css';
 import { TopologyViewerComponent } from './GraphViewer';
 import './root.css';
 import SkillTree from './SkillTree';
-const projectVersion = "0.3.7"
+const projectVersion = "0.3.8"
 
 // Create a single supabase client for interacting with your database
 let supabase = null

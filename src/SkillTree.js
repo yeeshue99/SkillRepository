@@ -11,14 +11,24 @@ function SkillTree({ data, selectedArchetype, checked }) {
         console.log(name)
     };
 
+
+
     const SkillCard = ({ skill, checked, selected, onClick }) => {
+        const handleCopyClick = (event) => {
+            event.stopPropagation();
+            navigator.clipboard.writeText(skill.description);
+        }
+
         return (
             <div
                 className={`skill-card ${selected ? 'skill-card__activated' : ''}`}
                 onClick={() => onClick(skill.name)}
             >
-                <div className="skill-name">{skill.name}</div>
-                <div className="expanded-skill">
+                <div className="skill-header">
+                    <div className="skill-name">{skill.name}</div>
+                    <button className={`${selected ? '' : 'hidden'} clickable borderless`} onClick={handleCopyClick}>Copy</button>
+                </div>
+                <div>
                     <div className="skill-info"><b>Prerequisite:</b> {skill.prerequisite}</div>
                     <div className="skill-info"><b>Casting Time:</b> {skill.casting_time}</div>
                     <div className="skill-info"><b>Range:</b> {skill.range}</div>
