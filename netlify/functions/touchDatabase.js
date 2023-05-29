@@ -8,6 +8,8 @@ const handler = async function (event, context) {
 
     const skills = await supabase.from('Skills').select().order('name', { ascending: true })
 
+    console.log(skills.data[0]);
+
     return {
         statusCode: 200,
         body: JSON.stringify(skills.data),
