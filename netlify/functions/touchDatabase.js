@@ -7,7 +7,7 @@ const handler = async function (event, context) {
 
     const skills = await supabase.from('Skills').select().order('name', { ascending: true })
 
-    console.log(skills.data[0]);
+    console.log(skills.data.length);
 
     return {
         statusCode: 200,
