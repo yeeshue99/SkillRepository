@@ -1,10 +1,10 @@
 export const defaults = {
     // dagre algo options, uses default value on undefined
-    nodeSep: 50, // the separation between adjacent nodes in the same rank
+    nodeSep: 75, // the separation between adjacent nodes in the same rank
     edgeSep: undefined, // the separation between adjacent edges in the same rank
-    rankSep: 300, // the separation between each rank in the layout
+    rankSep: 80, // the separation between each rank in the layout
     rankDir: "TB", // 'TB' for top to bottom flow, 'LR' for left to right,
-    ranker: "tight-tree", // Type of algorithm to assign a rank to each node in the input graph. Possible values: 'network-simplex', 'tight-tree' or 'longest-path'
+    ranker: "network-simplex", // Type of algorithm to assign a rank to each node in the input graph. Possible values: 'network-simplex', 'tight-tree' or 'longest-path'
     //'network-simplex', 'tight-tree' or 'longest-path'
     minLen: function (edge) {
         return 1;
@@ -17,7 +17,7 @@ export const defaults = {
     fit: true, // whether to fit to viewport
     padding: 15, // fit padding
     spacingFactor: 1, // Applies a multiplicative factor (>0) to expand or compress the overall area that the nodes take up
-    nodeDimensionsIncludeLabels: false, // whether labels should be included in determining the space used by a node
+    nodeDimensionsIncludeLabels: true, // whether labels should be included in determining the space used by a node
     animate: false, // whether to transition the node positions
     animateFilter: function (node, i) {
         return true;

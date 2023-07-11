@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './root.css';
 import './SkillTree.css';
 
-function SkillTree({ data, selectedArchetype, checked }) {
+function SkillTree({ data, selectedArchetype, checkedSkills }) {
     // Create a skill card component
     const [activeCard, setActiveCard] = useState(null);
 
@@ -13,15 +13,17 @@ function SkillTree({ data, selectedArchetype, checked }) {
 
 
 
-    const SkillCard = ({ skill, checked, selected, onClick }) => {
+    const SkillCard = ({ skill, checkedSkills, selected, onClick }) => {
         const handleCopyClick = (event) => {
             event.stopPropagation();
             navigator.clipboard.writeText(skill.description);
         }
 
+        console.log(checkedSkills.includes(skill.name))
+
         return (
             <div
-                className={`skill-card ${selected ? 'skill-card__activated' : ''}`}
+                className={`skill-card ${selected ? 'skill-card__activated' : ''} ${checkedSkills.includes(skill.name) ? 'skill-card__checked' : ''}`}
                 onClick={() => onClick(skill.name)}
             >
                 <div className="skill-header">
@@ -50,7 +52,7 @@ function SkillTree({ data, selectedArchetype, checked }) {
                     <div className="archetype-name">{archetype}</div>
                     <div>
                         {skills.map((skill) => (
-                            <SkillCard skill={skill} checked={checked} key={skill.name} selected={activeCard === skill.name}
+                            <SkillCard skill={skill} checkedSkills={checkedSkills} key={skill.name} selected={activeCard === skill.name}
                                 onClick={handleCardClick} />
                         ))}
                     </div>

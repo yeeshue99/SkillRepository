@@ -6,7 +6,7 @@ import './App.css';
 import { TopologyViewerComponent } from './GraphViewer';
 import './root.css';
 import SkillTree from './SkillTree';
-const projectVersion = "0.3.8"
+const projectVersion = "0.4.0"
 
 // Create a single supabase client for interacting with your database
 let supabase = null
@@ -34,10 +34,10 @@ function App() {
     const initialValue = JSON.parse(saved);
     return initialValue || -1;
   });
-  const [checked, setChecked] = useState(() => {
-    const saved = localStorage.getItem("checked");
+  const [checkedSkills, setCheckedSkills] = useState(() => {
+    const saved = localStorage.getItem("checkedSkills");
     const initialValue = JSON.parse(saved);
-    return initialValue || false;
+    return initialValue || [];
   });
   const [colorScheme, setSelectedColorScheme] = useState(() => {
     const saved = localStorage.getItem("colorScheme");
@@ -69,14 +69,14 @@ function App() {
       localStorage.setItem("version", JSON.stringify(projectVersion))
       Swal.fire({
         title: `Version: ${projectVersion}`,
-        html: 'New in this version:<br>Graph view:<br>You can now view your skill tree as an actual tree! This should help with visualization of dependencies, as well as what you have available to you.<br>Graph view can now save your graph layout! So if you move nodes, it\'ll save your layout between sessions.<br>Graph View can now also click on skills in order to show a quick popup of the skill description.<br> <br>Skill List:<br> You can also now click on skill cards in the list to keep them open. You can have only one open at once, but this should make it easier to get more detailed information on skills.',
+        html: 'New in this version:<br>Save Learned Skills:<br>Additional functionality allows you to right click on skills in the graph view to mark them as learned. This should help visualize and understand what skills you have, don\'t have, and what is available to you.',
         width: "75%"
       })
     }
 
     // localStorage.setItem("version", JSON.stringify(version))
     localStorage.setItem("selectedArchetype", JSON.stringify(selectedArchetype));
-    localStorage.setItem("checked", JSON.stringify(checked));
+    localStorage.setItem("checkedSkills", JSON.stringify(checkedSkills));
     localStorage.setItem("colorScheme", JSON.stringify(colorScheme));
 
     assignColorScheme()
@@ -176,7 +176,7 @@ function App() {
     }
 
     setFetchedSkills(true);
-  }, [selectedArchetype, checked, colorScheme, fetchedSkills, showGraph]);
+  }, [selectedArchetype, checkedSkills, colorScheme, fetchedSkills, showGraph]);
 
   // Function to cycle through the archetypes
   const handleArchetypeCycleBackwards = () => {
@@ -238,13 +238,12 @@ function App() {
     setShowGraph(!showGraph);
   }
 
-  const handleChange = () => {
-    setChecked(!checked);
-  };
-
   return (
     <div>
       {<div className='app'>
+        <div className='skill-text'>
+          Skill points spent: {checkedSkills.length}
+        </div>
         <div className='nav-buttons'>
           <div className='nav-buttons__set'>
             <button className="clickable borderless" onClick={handleArchetypeCycleBackwards}>Previous archetype</button>
@@ -271,12 +270,6 @@ function App() {
             onChange={(event) => setSelectedColorScheme(event.target.value)}
             className="clickable">{installedColorSchemes.map(scheme => <option key={scheme} value={scheme}>{scheme}</option>)}</select>
 
-            <label className='clickable'>
-              <input type="checkbox" checked={checked}
-                onChange={handleChange} className="clickable" />
-              Show all descriptions
-            </label>
-
           </div>
 
           <div className='nav-buttons__set'>
@@ -287,7 +280,7 @@ function App() {
         </div>
 
         <div className='Graph'>
-          {showGraph && <TopologyViewerComponent skillGroups={skillGroups} selectedArchetype={selectedArchetype} colorScheme={colorScheme} showGraph={showGraph} resetViewer={resetViewer} setResetViewer={setResetViewer} />}
+          {showGraph && <TopologyViewerComponent skillGroups={skillGroups} selectedArchetype={selectedArchetype} colorScheme={colorScheme} showGraph={showGraph} resetViewer={resetViewer} setResetViewer={setResetViewer} checkedSkills={checkedSkills} setCheckedSkills={setCheckedSkills} />}
         </div>
         <br />
         {
@@ -296,7 +289,7 @@ function App() {
             <SkillTree
               data={skillGroups}
               selectedArchetype={selectedArchetype}
-              checked={checked}
+              checkedSkills={checkedSkills}
             />
           </div>
         }

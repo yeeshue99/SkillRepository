@@ -31,15 +31,19 @@
   overflow: hidden;
 }
 
+.skill-card__checked {
+  background-color: var(--quinary-color);
+}
+
 .skill-card:hover {
-  background-color: var(--primary-color);
+  filter: brightness(90%);
   cursor: pointer;
   height: 250px;
   overflow: auto;
 }
 
 .skill-card__activated {
-  background-color: var(--primary-color);
+  filter: brightness(90%);
   cursor: pointer;
   height: 250px;
   overflow: auto;

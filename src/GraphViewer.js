@@ -69,7 +69,7 @@ const createGraphElements = (skillGroups, selectedArchetype) => {
 
 
 
-export function TopologyViewerComponent({ skillGroups, selectedArchetype, colorScheme, showGraph, resetViewer, setResetViewer }) {
+export function TopologyViewerComponent({ skillGroups, selectedArchetype, colorScheme, showGraph, resetViewer, setResetViewer, checkedSkills, setCheckedSkills }) {
     const ref = useRef(null);
     const [graphData, setGraphData] = useState(() => {
         const saved = localStorage.getItem("graphData");
@@ -82,8 +82,18 @@ export function TopologyViewerComponent({ skillGroups, selectedArchetype, colorS
     useEffect(() => {
         const elements = createGraphElements(skillGroups, selectedArchetype);
         let tip;
+        let checked = getComputedStyle(document.documentElement).getPropertyValue('--quinary-color')
+        let unchecked = getComputedStyle(document.documentElement).getPropertyValue('--secondary-color')
+
 
         let style = calculateStyle(colorScheme)
+        style.push({
+            selector: "node",
+            style: {
+                // You can use function(node){} instead of ES6 syntax here
+                "background-color": node => checkedSkills.includes(node.data().id) ? checked : unchecked,
+            }
+        })
 
         if (resetViewer) {
             localStorage.removeItem("graphData");
@@ -119,6 +129,7 @@ export function TopologyViewerComponent({ skillGroups, selectedArchetype, colorS
 
             let generatedNodes = cy.nodes();
             let savedNodes = graphData[selectedArchetype].nodes;
+            console.log(savedNodes);
 
             let generatedEdges = cy.edges();
             let savedEdges = graphData[selectedArchetype].edges;
@@ -182,6 +193,20 @@ export function TopologyViewerComponent({ skillGroups, selectedArchetype, colorS
             setSelected(this);
         });
 
+        cy.off('cxttap');
+
+        cy.on('cxttap', "node", function (event) {
+            let target = event.target
+
+            let index = checkedSkills.indexOf(target.data().id)
+            if (index > -1) {
+                setCheckedSkills(checkedSkills.filter((_, i) => i !== index))
+            }
+            else {
+                setCheckedSkills([...checkedSkills, target.data().id])
+            }
+        });
+
         if (selected) {
             let nodeRef = selected.popperRef();
             let dummyDomEle = document.createElement('div');
@@ -230,7 +255,7 @@ export function TopologyViewerComponent({ skillGroups, selectedArchetype, colorS
                 cy.destroy();
             }
         };
-    }, [selectedArchetype, skillGroups, colorScheme, graphData, selected, firstRender, showGraph, resetViewer, setResetViewer]);
+    }, [selectedArchetype, skillGroups, colorScheme, graphData, selected, firstRender, showGraph, resetViewer, setResetViewer, checkedSkills, setCheckedSkills]);
     return <div className="topology-viewer-component" ref={ref}></div>;
 };
 
