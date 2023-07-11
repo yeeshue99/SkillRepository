@@ -19,7 +19,7 @@ const installedColorSchemes = ["melon", "dark-mode", "earth-tones", "bubblegum",
 
 
 async function getSkills() {
-  const skills = await supabase.from('Skills').select().order('name', { ascending: true })
+  const skills = await supabase.from('Skills').select().order('_id', { ascending: true })
   console.log("Fetched supabase")
   return skills.data
 }
