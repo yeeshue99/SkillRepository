@@ -238,11 +238,19 @@ function App() {
     setShowGraph(!showGraph);
   }
 
+  function getCheckedFromThisArchetype() {
+    if (!skillGroups[selectedArchetype]) return 0;
+    console.log(skillGroups[selectedArchetype])
+    const archetypeSkillNames = skillGroups[selectedArchetype].map(skill => skill.name)
+    let checkedFromThisArchetype = checkedSkills.filter(name => archetypeSkillNames.includes(name))
+    return checkedFromThisArchetype.length
+  }
+
   return (
     <div>
       {<div className='app'>
         <div className='skill-text'>
-          Skill points spent: {checkedSkills.length}
+          Skill points spent: {getCheckedFromThisArchetype()}
         </div>
         <div className='nav-buttons'>
           <div className='nav-buttons__set'>

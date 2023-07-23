@@ -18,9 +18,6 @@ function SkillTree({ data, selectedArchetype, checkedSkills }) {
             event.stopPropagation();
             navigator.clipboard.writeText(skill.description);
         }
-
-        console.log(checkedSkills.includes(skill.name))
-
         return (
             <div
                 className={`skill-card ${selected ? 'skill-card__activated' : ''} ${checkedSkills.includes(skill.name) ? 'skill-card__checked' : ''}`}
